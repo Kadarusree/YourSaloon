@@ -57,6 +57,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/notbar" />
         <activity
+            android:name=".OTP_Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/notbar" />
+        <activity
             android:name=".DashboardActivity"
             android:label="@string/title_activity_dashboard" />
 

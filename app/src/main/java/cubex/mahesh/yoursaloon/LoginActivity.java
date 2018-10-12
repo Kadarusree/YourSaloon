@@ -80,10 +80,11 @@ public class LoginActivity extends AppCompatActivity {
 
 
                         }else{
-
-                            Toast.makeText(LoginActivity.this,
+                            startActivity(new Intent(LoginActivity.this,
+                                    OTP_Activity.class));
+                           /* Toast.makeText(LoginActivity.this,
                                     "Please provide valid credentials",
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_LONG).show();*/
 
                         }
 
