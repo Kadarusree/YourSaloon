@@ -125,7 +125,7 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-        DatabaseReference ref =  dBase.getReference("/users");
+        DatabaseReference ref =  dBase.getReference("/business_women");
         DatabaseReference child_ref = ref.child("/"+uid);
         child_ref.child("makeup").setValue(makeup.isChecked());
         child_ref.child("bodycare").setValue(bodycare.isChecked());
@@ -169,7 +169,7 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference ref = storage.getReference("/users/"+uid);
+        StorageReference ref = storage.getReference("/business_women/"+uid);
         try {
             FileInputStream fis = openFileInput("business_women_profile_pic.png");
             ref.child("business_women_profile_pic.png").
@@ -180,7 +180,7 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
 
                             String url =    ref.getDownloadUrl().toString();
                             FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                            DatabaseReference ref =  dBase.getReference("/users");
+                            DatabaseReference ref =  dBase.getReference("/business_women");
                             DatabaseReference child_ref = ref.child("/"+uid);
                             child_ref.child("business_women_profile_pic").setValue(url);
 
@@ -198,7 +198,7 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference ref = storage.getReference("/users/"+uid);
+        StorageReference ref = storage.getReference("/business_women/"+uid);
         try {
             FileInputStream fis = openFileInput("business_women_commercial_reg_pic.png");
             ref.child("business_women_commercial_reg_pic.png").
@@ -210,7 +210,7 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
                             String url =    ref.getDownloadUrl().toString();
 
                             FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                            DatabaseReference ref =  dBase.getReference("/users");
+                            DatabaseReference ref =  dBase.getReference("/business_women");
                             DatabaseReference child_ref = ref.child("/"+uid);
                             child_ref.child("business_women_commercial_reg_pic").setValue(url);
 

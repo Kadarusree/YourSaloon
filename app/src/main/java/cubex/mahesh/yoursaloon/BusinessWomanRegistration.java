@@ -1,5 +1,7 @@
 package cubex.mahesh.yoursaloon;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +17,8 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,20 +33,33 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
+import cubex.mahesh.yoursaloon.api.ApiClient;
+import cubex.mahesh.yoursaloon.api.ApiInterface;
+import cubex.mahesh.yoursaloon.api.Credentials;
+import cubex.mahesh.yoursaloon.api.OTPResponse;
+import cubex.mahesh.yoursaloon.pojos.SaloonLocation;
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.philio.pinentry.PinEntryView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BusinessWomanRegistration extends AppCompatActivity {
 
     TextView sr;
     CircleImageView cview;
 
-    EditText email, pass, phno, city, location ,refno;
+    EditText email, pass, phno, city, location, refno;
 
     Button next;
 
     private FirebaseAuth mAuth;
 
+    SaloonLocation mSaloonLocation;
+    boolean profile_pic_avaiable = false;
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +67,12 @@ public class BusinessWomanRegistration extends AppCompatActivity {
         setContentView(R.layout.activity_business_women_registration);
 
         mAuth = FirebaseAuth.getInstance();
-
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Sending OTP");
 
         Typeface tf = Typeface.createFromAsset
-                (getAssets(),"B93.ttf");
+                (getAssets(), "B93.ttf");
 
         sr = findViewById(R.id.sr);
         sr.setTypeface(tf);
@@ -111,13 +130,13 @@ public class BusinessWomanRegistration extends AppCompatActivity {
         location.setTypeface(tf);
 
         Button location_picker = findViewById(R.id.location_picker);
-        location_picker.setOnClickListener((v)->{
+        location_picker.setOnClickListener((v) -> {
 
             try {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 Intent i = builder.build(BusinessWomanRegistration.this);
-                startActivityForResult(i,150);
-            }catch (Exception e){
+                startActivityForResult(i, 150);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -137,7 +156,7 @@ public class BusinessWomanRegistration extends AppCompatActivity {
                 &&
                 ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
-        }else {
+        } else {
             Location l = lManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             lManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
                     1000, 1, new LocationListener() {
@@ -147,8 +166,8 @@ public class BusinessWomanRegistration extends AppCompatActivity {
                             double lati = location.getLatitude();
                             double longi = location.getLongitude();
 
-                            BusinessWomanRegistration.this.location.setText(lati+","+longi);
-
+                            BusinessWomanRegistration.this.location.setText(lati + "," + longi);
+                            mSaloonLocation = new SaloonLocation(lati, longi);
                             lManager.removeUpdates(this);
                         }
 
@@ -171,44 +190,14 @@ public class BusinessWomanRegistration extends AppCompatActivity {
 
     }
 
-   public void next(View v)
-    {
+    public void next(View v) {
 
 //    startActivity(new Intent(this,
 //                    BusinessWomanRegistration1.class));
-
-        mAuth.createUserWithEmailAndPassword(
-                email.getText().toString(),
-                pass.getText().toString()).addOnCompleteListener((task)->{
-            if(task.isSuccessful()){
-
-                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                DatabaseReference ref =  dBase.getReference("/users");
-                DatabaseReference child_ref = ref.child("/"+uid);
-                child_ref.child("reg_type").setValue("business_women");
-                child_ref.child("email").setValue(email.getText().toString());
-                child_ref.child("password").setValue(pass.getText().toString());
-                child_ref.child("phoneno").setValue(phno.getText().toString());
-                child_ref.child("city").setValue(city.getText().toString());
-                child_ref.child("location").setValue(location.getText().toString());
-                child_ref.child("ref_no").setValue(refno.getText().toString());
-
-                startActivity(new Intent(this,
-                        BusinessWomanRegistration1.class));
-
-
-            }else{
-
-                Toast.makeText(BusinessWomanRegistration.this,
-                        "Failed to Register, May be Email id is already exist!",
-                        Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-
+        if (validadtions()) {
+            String randomNumber = String.format("%04d", new Random().nextInt(10000));
+            sendOTP(phno.getText().toString(), randomNumber);
+        }
 
     }
 
@@ -216,8 +205,7 @@ public class BusinessWomanRegistration extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==123 && resultCode==RESULT_OK)
-        {
+        if (requestCode == 123 && resultCode == RESULT_OK) {
             Bitmap bmp = (Bitmap) data.getExtras().get("data");
             cview.setImageBitmap(bmp);
 
@@ -226,19 +214,18 @@ public class BusinessWomanRegistration extends AppCompatActivity {
                 FileOutputStream fos = openFileOutput("business_women_profile_pic.png",
                         Context.MODE_PRIVATE);
                 bmp.compress(Bitmap.CompressFormat.PNG,
-                        100,fos);
+                        100, fos);
                 fos.flush();
                 fos.close();
 
-
+                profile_pic_avaiable = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
 
-        if(requestCode==124 && resultCode==RESULT_OK)
-        {
+        if (requestCode == 124 && resultCode == RESULT_OK) {
             try {
 
                 Uri u = data.getData();
@@ -248,10 +235,10 @@ public class BusinessWomanRegistration extends AppCompatActivity {
                 FileOutputStream fos = openFileOutput("business_women_profile_pic.png",
                         Context.MODE_PRIVATE);
                 bmp.compress(Bitmap.CompressFormat.PNG,
-                        100,fos);
+                        100, fos);
                 fos.flush();
                 fos.close();
-
+                profile_pic_avaiable = true;
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -259,16 +246,145 @@ public class BusinessWomanRegistration extends AppCompatActivity {
 
         }
 
-        if(requestCode==150 && resultCode==RESULT_OK)
-        {
+        if (requestCode == 150 && resultCode == RESULT_OK) {
             Place selectedPlace = PlacePicker.getPlace(data, this);
 
             double lati = selectedPlace.getLatLng().latitude;
             double longi = selectedPlace.getLatLng().latitude;
 
-            location.setText(lati+","+longi);
+            location.setText(lati + "," + longi);
 
         }
 
+    }
+
+
+    public boolean validadtions() {
+        boolean isValid = true;
+        if (!isValidEmail(email.getText().toString().trim())) {
+            email.setError("Invalid Email");
+            isValid = false;
+        }
+        if (phno.getText().toString().length() < 10) {
+            phno.setError("Enter 10 digit mobile number");
+            isValid = false;
+        }
+        if (phno.getText().toString().length() < 6) {
+            email.setError("Password must be minimum 6 characters");
+            isValid = false;
+        }
+        if (city.getText().toString().length() < 3) {
+            city.setError("City Name must be minimum 3 characters");
+            isValid = false;
+        }
+        if (refno.getText().toString().length() < 5) {
+            city.setError("Enter 5 digit reference number");
+            isValid = false;
+        }
+        if (!profile_pic_avaiable) {
+            Toast.makeText(getApplicationContext(), "Upload a profile picture", Toast.LENGTH_SHORT).show();
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    public void sendOTP(String s, String randomNumber) {
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+        mProgressDialog.show();
+        Call<OTPResponse> call = apiService.sendOTP(Credentials.MOBILE, Credentials.API_PASSWORD, s, Credentials.SENDER, randomNumber, Credentials.APPLICATION_TYPE, Credentials.LANGUAGE, Credentials.RETURN_JSON);
+        call.enqueue(new Callback<OTPResponse>() {
+            @Override
+            public void onResponse(Call<OTPResponse> call, Response<OTPResponse> response) {
+                Response<OTPResponse> response2 = response;
+                mProgressDialog.dismiss();
+                if (response.body().getResponseStatus().equalsIgnoreCase("success")) {
+                    showOTPDialog(randomNumber);
+                } else {
+                    Toast.makeText(getApplicationContext(), response.body().getError().getMessageEn(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<OTPResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+
+                mProgressDialog.dismiss();
+            }
+        });
+
+    }
+
+
+    public void showOTPDialog(String otp) {
+        Toast.makeText(getApplicationContext(), otp, Toast.LENGTH_LONG).show();
+        Dialog d = new Dialog(BusinessWomanRegistration.this);
+        d.setContentView(R.layout.activity_otp_);
+        d.setCancelable(false);
+
+
+        PinEntryView mEdtPin = (PinEntryView) d.findViewById(R.id.inputOtp);
+        Button mCancel = (Button) d.findViewById(R.id.btn_cacel);
+        Button mSubmit = (Button) d.findViewById(R.id.btn_verify_otp);
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+            }
+        });
+        mSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mEdtPin.getText().toString().equalsIgnoreCase(otp)) {
+                    d.dismiss();
+                    startSignUp();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Invalid OTP", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        d.show();
+    }
+
+    private void startSignUp() {
+        mProgressDialog.setMessage("Signing In for first Time");
+        mProgressDialog.show();
+        mAuth.createUserWithEmailAndPassword(
+                email.getText().toString(),
+                pass.getText().toString()).addOnCompleteListener((task) -> {
+            mProgressDialog.dismiss();
+            if (task.isSuccessful()) {
+
+                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                DatabaseReference ref = dBase.getReference("/business_women");
+                DatabaseReference child_ref = ref.child("/" + uid);
+                child_ref.child("reg_type").setValue("business_women");
+                child_ref.child("email").setValue(email.getText().toString());
+                child_ref.child("password").setValue(pass.getText().toString());
+                child_ref.child("phoneno").setValue(phno.getText().toString());
+                child_ref.child("city").setValue(city.getText().toString());
+                child_ref.child("location").setValue(mSaloonLocation);
+                child_ref.child("ref_no").setValue(refno.getText().toString());
+                child_ref.child("accepted").setValue(false);
+
+                startActivity(new Intent(this,
+                        BusinessWomanRegistration1.class));
+
+
+            } else {
+
+                Toast.makeText(BusinessWomanRegistration.this,
+                        "Failed to Register, May be Email id is already exist!",
+                        Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 }

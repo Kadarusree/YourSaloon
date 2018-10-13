@@ -10,7 +10,8 @@ import android.view.View;
 import android.widget.Button;
 
 public class LoginOptionsActivity extends AppCompatActivity {
-    Button salon,cust,bwoman,bguest;
+    Button salon, cust, bwoman, bguest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,45 +23,43 @@ public class LoginOptionsActivity extends AppCompatActivity {
         bguest = findViewById(R.id.bns_bgst);
 
         Typeface tf = Typeface.createFromAsset
-                (getAssets(),"B93.ttf");
+                (getAssets(), "B93.ttf");
         salon.setTypeface(tf);
         cust.setTypeface(tf);
         bwoman.setTypeface(tf);
         bguest.setTypeface(tf);
     }
 
-    public void salon(View v)
-    {
+    public void salon(View v) {
         SharedPreferences spf =
-    getSharedPreferences("saloon_prfs", Context.MODE_PRIVATE);
+                getSharedPreferences("saloon_prfs", Context.MODE_PRIVATE);
         SharedPreferences.Editor spe = spf.edit();
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.sln_btn:
 
-                spe.putString("user_type","salon");
+                spe.putString("user_type", "saloon");
 
                 startActivity(new Intent(this,
-             LoginActivity.class));
+                        LoginActivity.class));
 
                 break;
 
             case R.id.cust_btn:
-                spe.putString("user_type","customer");
+                spe.putString("user_type", "customer");
 
                 startActivity(new Intent(this,
                         LoginActivity.class));
 
                 break;
             case R.id.bwmn_btn:
-                spe.putString("user_type","business women");
+                spe.putString("user_type", "business_women");
 
                 startActivity(new Intent(this,
                         LoginActivity.class));
 
                 break;
             case R.id.bns_bgst:
-                spe.putString("user_type","business guest");
+                spe.putString("user_type", "business guest");
 
                 startActivity(new Intent(this,
                         LoginActivity.class));

@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -53,6 +54,7 @@ import me.philio.pinentry.PinEntryView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class CustomerRegistration extends AppCompatActivity {
 
@@ -300,6 +302,7 @@ public class CustomerRegistration extends AppCompatActivity {
         });
 
     }
+
 
 
     public boolean validadtions() {

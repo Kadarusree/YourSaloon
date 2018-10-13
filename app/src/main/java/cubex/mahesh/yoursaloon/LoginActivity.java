@@ -2,9 +2,12 @@ package cubex.mahesh.yoursaloon;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -15,6 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,12 +34,20 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     ProgressDialog mProgressDialog;
+    SharedPreferences mSharedpref;
+
+
+    FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+        mSharedpref = getSharedPreferences("saloon_prfs", Context.MODE_PRIVATE);
         Typeface tf = Typeface.createFromAsset
                 (getAssets(), "B93.ttf");
 
@@ -75,13 +92,74 @@ public class LoginActivity extends AppCompatActivity {
 
             mAuth.signInWithEmailAndPassword(email.getText().toString(),
                     pwd.getText().toString()).addOnCompleteListener((task) -> {
-mProgressDialog.dismiss();
+                mProgressDialog.dismiss();
                 if (task.isSuccessful()) {
+                    mProgressDialog.setMessage("Checking Approval Status");
+                    String type = mSharedpref.getString("user_type", "none");
+                    String id = mAuth.getCurrentUser().getUid();
+                    if (type.equalsIgnoreCase("saloon")) {
+                        mProgressDialog.show();
+                        mFirebaseDatabase.getReference("saloons").child(id).child("accepted").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                mProgressDialog.dismiss();
+                                boolean status = (boolean) dataSnapshot.getValue();
+                                AlertDialog.Builder ad =
+                                        new AlertDialog.Builder(LoginActivity.this);
+                                ad.setTitle("Your Salon");
+                                ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                                if (!status) {
+                                    ad.setMessage("Your Account Approval is Pending.");
+                                } else {
+                                    ad.setMessage("Account Approved.");
+                                }
+                                ad.show();
+                            }
 
-                    startActivity(new Intent(LoginActivity.this,
-                            DashboardActivity.class));
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                mProgressDialog.dismiss();
+                            }
+                        });
+                    } else if (type.equalsIgnoreCase("customer")) {
+                        startActivity(new Intent(LoginActivity.this,
+                                DashboardActivity.class));
+                    } else if (type.equalsIgnoreCase("business_women")) {
+                        mProgressDialog.show();
+                        mFirebaseDatabase.getReference("business_women").child(id).child("accepted").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                mProgressDialog.dismiss();
+                                boolean status = (boolean) dataSnapshot.getValue();
+                                AlertDialog.Builder ad =
+                                        new AlertDialog.Builder(LoginActivity.this);
+                                ad.setTitle("Your Salon");
+                                ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                                if (!status) {
+                                    ad.setMessage("Your Account Approval is Pending.");
+                                } else {
+                                    ad.setMessage("Account Approved.");
+                                }
+                                ad.show();
+                            }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                mProgressDialog.dismiss();
+                            }
+                        });
+                    }
                 } else {
                     Toast.makeText(LoginActivity.this,
                             "Please provide valid credentials",

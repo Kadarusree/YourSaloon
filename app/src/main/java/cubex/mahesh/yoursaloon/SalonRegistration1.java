@@ -1,5 +1,6 @@
 package cubex.mahesh.yoursaloon;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,11 +12,14 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,12 +45,14 @@ public class SalonRegistration1 extends AppCompatActivity {
     Button register;
 
     CheckBox makeup,bodycare,hennadesign,haircut,eyebrows,hairprotein,hairstyle,hairtreatment,westernbath,wax,massage,photography;
-
+    ProgressDialog mProgressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_salon_registration1);
-
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Sending Data");
         uploadProfilePic();
 
         Typeface tf = Typeface.createFromAsset
@@ -128,7 +134,7 @@ public class SalonRegistration1 extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-        DatabaseReference ref =  dBase.getReference("/users");
+        DatabaseReference ref =  dBase.getReference("/saloons");
         DatabaseReference child_ref = ref.child("/"+uid);
         child_ref.child("makeup").setValue(makeup.isChecked());
         child_ref.child("bodycare").setValue(bodycare.isChecked());
@@ -142,6 +148,7 @@ public class SalonRegistration1 extends AppCompatActivity {
         child_ref.child("wax").setValue(wax.isChecked());
         child_ref.child("massage").setValue(massage.isChecked());
         child_ref.child("photography").setValue(photography.isChecked());
+        child_ref.child("accepted").setValue(false);
 
 
         AlertDialog.Builder ad =
@@ -174,7 +181,7 @@ public class SalonRegistration1 extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference ref = storage.getReference("/users/"+uid);
+        StorageReference ref = storage.getReference("/saloons/"+uid);
         try {
             FileInputStream fis = openFileInput("salon_profile_pic.png");
             ref.child("salon_profile_pic.png").
@@ -278,6 +285,8 @@ public class SalonRegistration1 extends AppCompatActivity {
         }
 
     }
+
+
 
 
 }
