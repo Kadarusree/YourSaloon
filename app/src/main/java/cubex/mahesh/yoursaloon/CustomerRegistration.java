@@ -15,6 +15,8 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,8 +34,16 @@ import com.google.firebase.storage.UploadTask;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
+import cubex.mahesh.yoursaloon.api.ApiClient;
+import cubex.mahesh.yoursaloon.api.ApiInterface;
+import cubex.mahesh.yoursaloon.api.Credentials;
+import cubex.mahesh.yoursaloon.api.OTPResponse;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CustomerRegistration extends AppCompatActivity {
 
@@ -45,6 +55,7 @@ public class CustomerRegistration extends AppCompatActivity {
     Button next;
 
     private FirebaseAuth mAuth;
+    boolean profile_pic_avaiable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +66,7 @@ public class CustomerRegistration extends AppCompatActivity {
 
 
         Typeface tf = Typeface.createFromAsset
-                (getAssets(),"B93.ttf");
+                (getAssets(), "B93.ttf");
 
         sr = findViewById(R.id.sr);
         sr.setTypeface(tf);
@@ -111,13 +122,18 @@ public class CustomerRegistration extends AppCompatActivity {
 
     }
 
-   public void submit(View v)
-    {
+    public void submit(View v) {
+
+        if (validadtions()) {
+            String randomNumber = String.format("%04d", new Random().nextInt(10000));
+            sendOTP(phno.getText().toString(), randomNumber);
+        }
+
 
 //    startActivity(new Intent(this,
 //                    SalonRegistration1.class));
 
-        mAuth.createUserWithEmailAndPassword(
+       /* mAuth.createUserWithEmailAndPassword(
                 email.getText().toString(),
                 pass.getText().toString()).addOnCompleteListener((task)->{
             if(task.isSuccessful()){
@@ -148,7 +164,7 @@ public class CustomerRegistration extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
 
             }
-        });
+        });*/
 
 
     }
@@ -158,8 +174,7 @@ public class CustomerRegistration extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==123 && resultCode==RESULT_OK)
-        {
+        if (requestCode == 123 && resultCode == RESULT_OK) {
             Bitmap bmp = (Bitmap) data.getExtras().get("data");
             cview.setImageBitmap(bmp);
 
@@ -168,9 +183,10 @@ public class CustomerRegistration extends AppCompatActivity {
                 FileOutputStream fos = openFileOutput("customer_profile_pic.png",
                         Context.MODE_PRIVATE);
                 bmp.compress(Bitmap.CompressFormat.PNG,
-                        100,fos);
+                        100, fos);
                 fos.flush();
                 fos.close();
+                profile_pic_avaiable = true;
 
 
             } catch (IOException e) {
@@ -179,8 +195,7 @@ public class CustomerRegistration extends AppCompatActivity {
 
         }
 
-        if(requestCode==124 && resultCode==RESULT_OK)
-        {
+        if (requestCode == 124 && resultCode == RESULT_OK) {
             try {
 
                 Uri u = data.getData();
@@ -190,10 +205,10 @@ public class CustomerRegistration extends AppCompatActivity {
                 FileOutputStream fos = openFileOutput("customer_profile_pic.png",
                         Context.MODE_PRIVATE);
                 bmp.compress(Bitmap.CompressFormat.PNG,
-                        100,fos);
+                        100, fos);
                 fos.flush();
                 fos.close();
-
+                profile_pic_avaiable = true;
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -203,13 +218,12 @@ public class CustomerRegistration extends AppCompatActivity {
 
     }
 
-    void uploadProfilePic( )
-    {
+    void uploadProfilePic() {
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference ref = storage.getReference("/users/"+uid);
+        StorageReference ref = storage.getReference("/users/" + uid);
         try {
             FileInputStream fis = openFileInput("customer_profile_pic.png");
             ref.child("customer_profile_pic.png").
@@ -218,19 +232,74 @@ public class CustomerRegistration extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            String url =    ref.getDownloadUrl().toString();
+                            String url = ref.getDownloadUrl().toString();
                             FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                            DatabaseReference ref =  dBase.getReference("/users");
-                            DatabaseReference child_ref = ref.child("/"+uid);
+                            DatabaseReference ref = dBase.getReference("/users");
+                            DatabaseReference child_ref = ref.child("/" + uid);
                             child_ref.child("customer_profile_pic").setValue(url);
 
                         }
                     });
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
+
+    public void sendOTP(String s, String randomNumber) {
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<OTPResponse> call = apiService.sendOTP(Credentials.MOBILE, Credentials.API_PASSWORD, s, Credentials.SENDER, randomNumber, Credentials.APPLICATION_TYPE, Credentials.LANGUAGE, Credentials.RETURN_JSON);
+        call.enqueue(new Callback<OTPResponse>() {
+            @Override
+            public void onResponse(Call<OTPResponse> call, Response<OTPResponse> response) {
+                Response<OTPResponse> response2 = response;
+
+                if (response.body().getResponseStatus().equalsIgnoreCase("success")) {
+                    startActivity(new Intent(getApplicationContext(), OTP_Activity.class));
+                } else {
+                    Toast.makeText(getApplicationContext(), response.body().getError().getMessageEn(), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<OTPResponse> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
+    public boolean validadtions() {
+        boolean isValid = true;
+        if (!isValidEmail(email.getText().toString().trim())) {
+            email.setError("Invalid Email");
+            isValid = false;
+        }
+        if (phno.getText().toString().length() < 10) {
+            phno.setError("Enter 10 digit mobile number");
+            isValid = false;
+        }
+        if (phno.getText().toString().length() < 6) {
+            email.setError("Password must be minimum 6 characters");
+            isValid = false;
+        }
+        if (city.getText().toString().length() < 3) {
+            city.setError("City Name must be minimum 3 characters");
+            isValid = false;
+        }
+        if (!profile_pic_avaiable) {
+            Toast.makeText(getApplicationContext(), "Upload a profile picture", Toast.LENGTH_SHORT).show();
+        }
+        return isValid;
+    }
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
 
 }
