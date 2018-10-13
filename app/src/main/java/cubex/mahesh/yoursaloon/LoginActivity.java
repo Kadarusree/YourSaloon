@@ -17,8 +17,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView li,fp;
-    EditText email,pwd;
+    TextView li, fp;
+    EditText email, pwd;
     CheckBox cb1;
     Button login, caft;
     private FirebaseAuth mAuth;
@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Typeface tf = Typeface.createFromAsset
-                (getAssets(),"B93.ttf");
+                (getAssets(), "B93.ttf");
 
         li = findViewById(R.id.li);
         li.setTypeface(tf);
@@ -56,60 +56,53 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-
         cb1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 
-
-
-
             }
         });
 
-        login.setOnClickListener((v)->{
+        login.setOnClickListener((v) -> {
 
             mAuth.signInWithEmailAndPassword(email.getText().toString(),
-                    pwd.getText().toString()).addOnCompleteListener((task)->{
+                    pwd.getText().toString()).addOnCompleteListener((task) -> {
 
-                        if(task.isSuccessful()){
+                if (task.isSuccessful()) {
 
-                     startActivity(new Intent(LoginActivity.this,
-                             DashboardActivity.class));
+                    startActivity(new Intent(LoginActivity.this,
+                            DashboardActivity.class));
 
 
-                        }else{
-                            startActivity(new Intent(LoginActivity.this,
-                                    OTP_Activity.class));
-                           /* Toast.makeText(LoginActivity.this,
-                                    "Please provide valid credentials",
-                                    Toast.LENGTH_LONG).show();*/
-
-                        }
+                } else {
+                    Toast.makeText(LoginActivity.this,
+                            "Please provide valid credentials",
+                            Toast.LENGTH_LONG).show();
+                }
 
             });
         });
 
-        caft.setOnClickListener((v)->{
+        caft.setOnClickListener((v) -> {
 
             SharedPreferences spf =
                     getSharedPreferences("saloon_prfs", Context.MODE_PRIVATE);
-        String type =  spf. getString("user_type","");
+            String type = spf.getString("user_type", "");
 
-        if(type.equals("salon")) {
-            startActivity(new Intent(LoginActivity.this,
-                    SalonRegistration.class));
-        }else   if(type.equals("business women")) {
-            startActivity(new Intent(LoginActivity.this,
-                    BusinessWomanRegistration.class));
-        }else   if(type.equals("business guest")) {
-            startActivity(new Intent(LoginActivity.this,
-                    BusinessGuestRegistration.class));
-        }else   if(type.equals("customer")) {
-            startActivity(new Intent(LoginActivity.this,
-                    CustomerRegistration.class));
-        }
+            if (type.equals("salon")) {
+                startActivity(new Intent(LoginActivity.this,
+                        SalonRegistration.class));
+            } else if (type.equals("business women")) {
+                startActivity(new Intent(LoginActivity.this,
+                        BusinessWomanRegistration.class));
+            } else if (type.equals("business guest")) {
+                startActivity(new Intent(LoginActivity.this,
+                        BusinessGuestRegistration.class));
+            } else if (type.equals("customer")) {
+                startActivity(new Intent(LoginActivity.this,
+                        CustomerRegistration.class));
+            }
         });
 
 

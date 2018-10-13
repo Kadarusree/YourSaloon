@@ -1,5 +1,7 @@
 package cubex.mahesh.yoursaloon;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +14,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +26,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -40,7 +46,9 @@ import cubex.mahesh.yoursaloon.api.ApiClient;
 import cubex.mahesh.yoursaloon.api.ApiInterface;
 import cubex.mahesh.yoursaloon.api.Credentials;
 import cubex.mahesh.yoursaloon.api.OTPResponse;
+import cubex.mahesh.yoursaloon.pojos.UserPojo;
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.philio.pinentry.PinEntryView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,12 +65,17 @@ public class CustomerRegistration extends AppCompatActivity {
     private FirebaseAuth mAuth;
     boolean profile_pic_avaiable = false;
 
+    ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_registration);
 
         mAuth = FirebaseAuth.getInstance();
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Sending OTP");
 
 
         Typeface tf = Typeface.createFromAsset
@@ -123,50 +136,10 @@ public class CustomerRegistration extends AppCompatActivity {
     }
 
     public void submit(View v) {
-
         if (validadtions()) {
             String randomNumber = String.format("%04d", new Random().nextInt(10000));
             sendOTP(phno.getText().toString(), randomNumber);
         }
-
-
-//    startActivity(new Intent(this,
-//                    SalonRegistration1.class));
-
-       /* mAuth.createUserWithEmailAndPassword(
-                email.getText().toString(),
-                pass.getText().toString()).addOnCompleteListener((task)->{
-            if(task.isSuccessful()){
-
-                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-                FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                DatabaseReference ref =  dBase.getReference("/users");
-                DatabaseReference child_ref = ref.child("/"+uid);
-                child_ref.child("reg_type").setValue("customer");
-                child_ref.child("email").setValue(email.getText().toString());
-                child_ref.child("password").setValue(pass.getText().toString());
-                child_ref.child("phoneno").setValue(phno.getText().toString());
-                child_ref.child("city").setValue(city.getText().toString());
-
-                uploadProfilePic();
-
-//                startActivity(new Intent(this,
-//                        SalonRegistration1.class));
-
-                startActivity(new Intent(this,
-                        DashboardActivity.class));
-
-            }else{
-
-                Toast.makeText(CustomerRegistration.this,
-                        "Failed to Register, May be Email id is already exist!",
-                        Toast.LENGTH_LONG).show();
-
-            }
-        });*/
-
-
     }
 
 
@@ -219,55 +192,104 @@ public class CustomerRegistration extends AppCompatActivity {
     }
 
     void uploadProfilePic() {
-
+        mProgressDialog.setMessage("Uploading Profile Pic");
+        mProgressDialog.show();
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference ref = storage.getReference("/users/" + uid);
         try {
             FileInputStream fis = openFileInput("customer_profile_pic.png");
-            ref.child("customer_profile_pic.png").
-                    putStream(fis).
-                    addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            UploadTask uploadTask = ref.child("customer_profile_pic.png").
+                    putStream(fis);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            }).
+            addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            mProgressDialog.dismiss();
 
-                            String url = ref.getDownloadUrl().toString();
-                            FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                            DatabaseReference ref = dBase.getReference("/users");
-                            DatabaseReference child_ref = ref.child("/" + uid);
-                            child_ref.child("customer_profile_pic").setValue(url);
+                            String url =  taskSnapshot.getDownloadUrl().toString();
+
+
+
+
+                            UserPojo mUser = new UserPojo("",
+                                    pass.getText().toString().trim(),
+                                    email.getText().toString(),
+                                    phno.getText().toString().trim(),
+                                    city.getText().toString(),
+                                    "", url, "customer");
+                            uploadIntoDB(mUser, uid);
 
                         }
-                    });
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    mProgressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "Failed to upload profile picture", Toast.LENGTH_LONG).show();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
+    private void uploadIntoDB(UserPojo mUser, String uid) {
+        mProgressDialog.setMessage("Setting up your account");
+        mProgressDialog.show();
+        FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+        DatabaseReference ref = dBase.getReference("/users");
+        ref.child(uid).setValue(mUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                mProgressDialog.dismiss();
+                if (task.isSuccessful()) {
+                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                    Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
+
+                } else {
+
+                }
+            }
+        });
+       /* DatabaseReference child_ref = ref.child("/"+uid);
+        child_ref.child("reg_type").setValue("customer");
+        child_ref.child("email").setValue(email.getText().toString());
+        child_ref.child("password").setValue(pass.getText().toString());
+        child_ref.child("phoneno").setValue(phno.getText().toString());
+        child_ref.child("city").setValue(city.getText().toString());*/
+    }
+
 
     public void sendOTP(String s, String randomNumber) {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-
+        mProgressDialog.show();
         Call<OTPResponse> call = apiService.sendOTP(Credentials.MOBILE, Credentials.API_PASSWORD, s, Credentials.SENDER, randomNumber, Credentials.APPLICATION_TYPE, Credentials.LANGUAGE, Credentials.RETURN_JSON);
         call.enqueue(new Callback<OTPResponse>() {
             @Override
             public void onResponse(Call<OTPResponse> call, Response<OTPResponse> response) {
                 Response<OTPResponse> response2 = response;
-
+                mProgressDialog.dismiss();
                 if (response.body().getResponseStatus().equalsIgnoreCase("success")) {
-                    startActivity(new Intent(getApplicationContext(), OTP_Activity.class));
+                    showOTPDialog(randomNumber);
                 } else {
-                    Toast.makeText(getApplicationContext(), response.body().getError().getMessageEn(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), response.body().getError().getMessageEn(), Toast.LENGTH_LONG).show();
                 }
 
             }
 
             @Override
             public void onFailure(Call<OTPResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
 
+                mProgressDialog.dismiss();
             }
         });
 
@@ -294,12 +316,61 @@ public class CustomerRegistration extends AppCompatActivity {
         }
         if (!profile_pic_avaiable) {
             Toast.makeText(getApplicationContext(), "Upload a profile picture", Toast.LENGTH_SHORT).show();
+            isValid = false;
         }
         return isValid;
     }
 
     public static boolean isValidEmail(CharSequence target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+
+    public void showOTPDialog(String otp) {
+        Toast.makeText(getApplicationContext(), otp, Toast.LENGTH_LONG).show();
+        Dialog d = new Dialog(CustomerRegistration.this);
+        d.setContentView(R.layout.activity_otp_);
+        d.setCancelable(false);
+
+
+        PinEntryView mEdtPin = (PinEntryView) d.findViewById(R.id.inputOtp);
+        Button mCancel = (Button) d.findViewById(R.id.btn_cacel);
+        Button mSubmit = (Button) d.findViewById(R.id.btn_verify_otp);
+        mCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+            }
+        });
+        mSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mEdtPin.getText().toString().equalsIgnoreCase(otp)) {
+                    d.dismiss();
+                    startSignUp();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Invalid OTP", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        d.show();
+    }
+
+    private void startSignUp() {
+        mProgressDialog.setMessage("Signing In for first Time");
+        mProgressDialog.show();
+        mAuth.createUserWithEmailAndPassword(
+                email.getText().toString(),
+                pass.getText().toString()).addOnCompleteListener((task) -> {
+            mProgressDialog.dismiss();
+            if (task.isSuccessful()) {
+                uploadProfilePic();
+            } else {
+                Toast.makeText(CustomerRegistration.this,
+                        "Failed to Register, May be Email id is already exist!",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 }

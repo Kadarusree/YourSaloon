@@ -12,12 +12,22 @@ public class UserPojo {
     String city;
     String fcm_id;
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    String type;
+
     public UserPojo() {
     }
 
     String profile_pic;
 
-    public UserPojo(String username, String password, String email, String mobilenumber, String city, String fcm_id, String profile_pic) {
+    public UserPojo(String username, String password, String email, String mobilenumber, String city, String fcm_id, String profile_pic,String type) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -25,6 +35,7 @@ public class UserPojo {
         this.city = city;
         this.fcm_id = fcm_id;
         this.profile_pic = profile_pic;
+        this.type = type;
     }
 
     public String getUsername() {

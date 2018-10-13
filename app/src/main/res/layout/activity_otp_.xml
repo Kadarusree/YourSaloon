@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/viewContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="5dp"
     android:background="@color/colorPrimary">
 
@@ -65,48 +65,50 @@
 
             />
 
-        <Button
-            android:id="@+id/btn_verify_otp"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_marginTop="25dp"
-            android:background="@color/colorPrimaryDark"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/lbl_submit"
-            android:textColor="@android:color/white"
-            android:textSize="14dp" />
+
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_cacel"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/colorPrimaryDark"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:layout_marginRight="5dp"
+                android:text="@string/lbl_cancel"
+                android:textColor="@android:color/white"
+                android:textSize="14dp" />
+            <Button
+
+                android:id="@+id/btn_verify_otp"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/colorPrimaryDark"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/lbl_submit"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"
+                android:layout_marginLeft="5dp"
+                />
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
 
 
 
-    <LinearLayout
-        android:id="@+id/layout_edit_mobile"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/txt_edit_mobile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="16dp" />
-
-        <ImageButton
-            android:id="@+id/btn_edit_mobile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:background="@null"
-            android:src="@drawable/ic_edit_mobile" />
-    </LinearLayout>
 
 </RelativeLayout>
