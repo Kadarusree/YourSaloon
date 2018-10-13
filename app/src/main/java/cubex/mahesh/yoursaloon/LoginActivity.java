@@ -103,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 mProgressDialog.dismiss();
+
                                 boolean status = (boolean) dataSnapshot.getValue();
                                 AlertDialog.Builder ad =
                                         new AlertDialog.Builder(LoginActivity.this);
@@ -159,6 +160,35 @@ public class LoginActivity extends AppCompatActivity {
                                 mProgressDialog.dismiss();
                             }
                         });
+                    } else if (type.equalsIgnoreCase("business_guest")) {
+                        mProgressDialog.show();
+                        mFirebaseDatabase.getReference("business_guest").child(id).child("accepted").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                mProgressDialog.dismiss();
+                                boolean status = (boolean) dataSnapshot.getValue();
+                                AlertDialog.Builder ad =
+                                        new AlertDialog.Builder(LoginActivity.this);
+                                ad.setTitle("Your Salon");
+                                ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                                if (!status) {
+                                    ad.setMessage("Your Account Approval is Pending.");
+                                } else {
+                                    ad.setMessage("Account Approved.");
+                                }
+                                ad.show();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                mProgressDialog.dismiss();
+                            }
+                        });
                     }
                 } else {
                     Toast.makeText(LoginActivity.this,
@@ -175,13 +205,13 @@ public class LoginActivity extends AppCompatActivity {
                     getSharedPreferences("saloon_prfs", Context.MODE_PRIVATE);
             String type = spf.getString("user_type", "");
 
-            if (type.equals("salon")) {
+            if (type.equals("saloon")) {
                 startActivity(new Intent(LoginActivity.this,
                         SalonRegistration.class));
-            } else if (type.equals("business women")) {
+            } else if (type.equals("business_women")) {
                 startActivity(new Intent(LoginActivity.this,
                         BusinessWomanRegistration.class));
-            } else if (type.equals("business guest")) {
+            } else if (type.equals("business_guest")) {
                 startActivity(new Intent(LoginActivity.this,
                         BusinessGuestRegistration.class));
             } else if (type.equals("customer")) {

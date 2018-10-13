@@ -59,7 +59,7 @@ public class LoginOptionsActivity extends AppCompatActivity {
 
                 break;
             case R.id.bns_bgst:
-                spe.putString("user_type", "business guest");
+                spe.putString("user_type", "business_guest");
 
                 startActivity(new Intent(this,
                         LoginActivity.class));

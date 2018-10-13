@@ -278,7 +278,7 @@ public class BusinessWomanRegistration extends AppCompatActivity {
             isValid = false;
         }
         if (refno.getText().toString().length() < 5) {
-            city.setError("Enter 5 digit reference number");
+            refno.setError("Enter 5 digit reference number");
             isValid = false;
         }
         if (!profile_pic_avaiable) {
@@ -296,7 +296,7 @@ public class BusinessWomanRegistration extends AppCompatActivity {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
         mProgressDialog.show();
-        Call<OTPResponse> call = apiService.sendOTP(Credentials.MOBILE, Credentials.API_PASSWORD, s, Credentials.SENDER, randomNumber, Credentials.APPLICATION_TYPE, Credentials.LANGUAGE, Credentials.RETURN_JSON);
+        Call<OTPResponse> call = apiService.sendOTP(Credentials.MOBILE, Credentials.API_PASSWORD, s, Credentials.SENDER, "Your Saloon OTP is "+randomNumber, Credentials.APPLICATION_TYPE, Credentials.LANGUAGE, Credentials.RETURN_JSON);
         call.enqueue(new Callback<OTPResponse>() {
             @Override
             public void onResponse(Call<OTPResponse> call, Response<OTPResponse> response) {
