@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -199,7 +200,8 @@ public class CustomerRegistration extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference ref = storage.getReference("/users/" + uid);
         try {
-            FileInputStream fis = openFileInput("customer_profile_pic.png");
+            FileInputStream fis = openFileInput("customer_profile_pic.png");;
+
             UploadTask uploadTask = ref.child("customer_profile_pic.png").
                     putStream(fis);
             uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -208,23 +210,27 @@ public class CustomerRegistration extends AppCompatActivity {
 
                 }
             }).
-            addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
 
-                            String url =  taskSnapshot.getDownloadUrl().toString();
+                            taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                      String url =     task.getResult().toString();
+                                    UserPojo mUser = new UserPojo("",
+                                            pass.getText().toString().trim(),
+                                            email.getText().toString(),
+                                            phno.getText().toString().trim(),
+                                            city.getText().toString(),
+                                            "", url, "customer");
+                                    uploadIntoDB(mUser, uid);
+                                }
+                            });
 
 
 
-
-                            UserPojo mUser = new UserPojo("",
-                                    pass.getText().toString().trim(),
-                                    email.getText().toString(),
-                                    phno.getText().toString().trim(),
-                                    city.getText().toString(),
-                                    "", url, "customer");
-                            uploadIntoDB(mUser, uid);
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {

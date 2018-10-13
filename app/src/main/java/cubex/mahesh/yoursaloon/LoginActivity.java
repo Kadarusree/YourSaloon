@@ -1,5 +1,6 @@
 package cubex.mahesh.yoursaloon;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,8 @@ public class LoginActivity extends AppCompatActivity {
     Button login, caft;
     private FirebaseAuth mAuth;
 
+    ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,10 @@ public class LoginActivity extends AppCompatActivity {
         li = findViewById(R.id.li);
         li.setTypeface(tf);
 
-
+        mAuth = FirebaseAuth.getInstance();
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Logging In");
         email = findViewById(R.id.email);
         email.setTypeface(tf);
 
@@ -65,10 +71,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         login.setOnClickListener((v) -> {
+            mProgressDialog.show();
 
             mAuth.signInWithEmailAndPassword(email.getText().toString(),
                     pwd.getText().toString()).addOnCompleteListener((task) -> {
-
+mProgressDialog.dismiss();
                 if (task.isSuccessful()) {
 
                     startActivity(new Intent(LoginActivity.this,
