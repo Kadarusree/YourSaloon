@@ -18,11 +18,7 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/notbar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".LoginOptionsActivity"
@@ -78,7 +74,14 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="Maps Activity"></activity>
+            android:label="Maps Activity" />
+        <activity android:name=".SampleScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
