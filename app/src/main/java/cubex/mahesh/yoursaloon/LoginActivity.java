@@ -108,10 +108,16 @@ public class LoginActivity extends AppCompatActivity {
                                 AlertDialog.Builder ad =
                                         new AlertDialog.Builder(LoginActivity.this);
                                 ad.setTitle("Your Salon");
-                                ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                ad.setPositiveButton("Upload Receipt", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         dialogInterface.dismiss();
+                                    }
+                                });
+                                ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
                                     }
                                 });
                                 if (!status) {
@@ -141,10 +147,16 @@ public class LoginActivity extends AppCompatActivity {
                                 AlertDialog.Builder ad =
                                         new AlertDialog.Builder(LoginActivity.this);
                                 ad.setTitle("Your Salon");
-                                ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                ad.setPositiveButton("Upload Receipt", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         dialogInterface.dismiss();
+                                    }
+                                });
+                                ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
                                     }
                                 });
                                 if (!status) {
@@ -170,10 +182,16 @@ public class LoginActivity extends AppCompatActivity {
                                 AlertDialog.Builder ad =
                                         new AlertDialog.Builder(LoginActivity.this);
                                 ad.setTitle("Your Salon");
-                                ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                ad.setPositiveButton("Upload Payment Receipt", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         dialogInterface.dismiss();
+                                    }
+                                });
+                                ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
                                     }
                                 });
                                 if (!status) {
