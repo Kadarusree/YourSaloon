@@ -1,5 +1,6 @@
 package cubex.mahesh.yoursaloon;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -371,5 +372,10 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    public void showPreview(){
+        Dialog d = new Dialog(LoginActivity.this);
+        d.setContentView(R.layout.dialog_receipt);
     }
 }
