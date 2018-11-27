@@ -503,7 +503,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
 
     }
 
-    public void submit(View v){
+    public void submit(View v) {
         if (validadtions()) {
             String randomNumber = String.format("%04d", new Random().nextInt(10000));
             sendOTP(phno.getText().toString(), randomNumber);
@@ -550,7 +550,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
         mProgressDialog.show();
-        Call<OTPResponse> call = apiService.sendOTP(Credentials.MOBILE, Credentials.API_PASSWORD, s, Credentials.SENDER, "Your Saloon OTP is "+randomNumber, Credentials.APPLICATION_TYPE, Credentials.LANGUAGE, Credentials.RETURN_JSON);
+        Call<OTPResponse> call = apiService.sendOTP(Credentials.MOBILE, Credentials.API_PASSWORD, s, Credentials.SENDER, "Your Saloon OTP is " + randomNumber, Credentials.APPLICATION_TYPE, Credentials.LANGUAGE, Credentials.RETURN_JSON);
         call.enqueue(new Callback<OTPResponse>() {
             @Override
             public void onResponse(Call<OTPResponse> call, Response<OTPResponse> response) {

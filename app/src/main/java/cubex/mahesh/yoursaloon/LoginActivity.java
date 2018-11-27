@@ -14,16 +14,21 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +43,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import cubex.mahesh.yoursaloon.pojos.ApprovalRequestPojo;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -54,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseDatabase mFirebaseDatabase;
     DatabaseReference mDatabaseReference;
 
-    String AccountType, AccountID;
+    String AccountType, AccountID, CustomerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                                 ad.setPositiveButton("Upload Receipt", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                      //  dialogInterface.dismiss();
+                                        //  dialogInterface.dismiss();
                                         captureReceipt();
                                     }
                                 });
@@ -167,6 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                                 AlertDialog.Builder ad =
                                         new AlertDialog.Builder(LoginActivity.this);
                                 ad.setTitle("Your Salon");
+
                                 ad.setPositiveButton("Upload Receipt", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -313,7 +321,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 //    profile_pic_avaiable = true;
 
-                uploadReceipt();
+                showPreview(requestCode, bmp, null);
+
+                //   uploadReceipt();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -335,8 +345,7 @@ public class LoginActivity extends AppCompatActivity {
                 fos.close();
                 //  profile_pic_avaiable = true;
 
-                uploadReceipt();
-
+                showPreview(requestCode, null, u);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -348,34 +357,92 @@ public class LoginActivity extends AppCompatActivity {
 
 
     void uploadReceipt() {
+        mProgressDialog.setMessage("Uploading Payment Receipt");
         mProgressDialog.show();
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference ref = storage.getReference("Receipts/" + AccountType + "/" + AccountID);
         try {
             FileInputStream fis = openFileInput("receipt.png");
-            ref.child("receipt.png").
-                    putStream(fis).
+
+          //  UploadTask mUpload = ref.putStream(fid)
+                    ref.putStream(fis).
                     addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             mProgressDialog.dismiss();
-                            String url = ref.getDownloadUrl().toString();
 
-                          /*  FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                            DatabaseReference ref =  dBase.getReference("/users");
-                            DatabaseReference child_ref = ref.child("/"+uid);
-                            child_ref.child("business_women_commercial_reg_pic").setValue(url);*/
+
+                           ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                  String  url = task.getResult().toString();
+                                    FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                                    DatabaseReference ref = dBase.getReference("/PaymentRequests");
+                                    ApprovalRequestPojo mPojo = new ApprovalRequestPojo(AccountID, AccountType, url);
+                                    ref.child(AccountID).setValue(mPojo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(getApplicationContext(), "Request sent to Admin for Approval", Toast.LENGTH_SHORT).show();
+
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Something went wrong, Please retry...", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+
 
                         }
-                    });
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(), "Something went wrong, Please retry...", Toast.LENGTH_SHORT).show();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public void showPreview(){
+    public void showPreview(int requestCode, Bitmap bmp, Uri u) {
         Dialog d = new Dialog(LoginActivity.this);
         d.setContentView(R.layout.dialog_receipt);
+
+        ImageView image = d.findViewById(R.id.img_preview);
+        Button upload, cancel;
+        d.setCancelable(true);
+
+        upload = d.findViewById(R.id.upload);
+        cancel = d.findViewById(R.id.cancel);
+
+        switch (requestCode) {
+            case 123:
+                image.setImageBitmap(bmp);
+                break;
+
+            case 124:
+                image.setImageURI(u);
+                break;
+        }
+
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadReceipt();
+                d.cancel();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                d.dismiss();
+            }
+        });
+
+        d.show();
     }
 }
