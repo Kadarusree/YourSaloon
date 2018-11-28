@@ -134,23 +134,30 @@ public class LoginActivity extends AppCompatActivity {
                                 AlertDialog.Builder ad =
                                         new AlertDialog.Builder(LoginActivity.this);
                                 ad.setTitle("Your Salon");
-                                ad.setPositiveButton("Upload Receipt", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        //  dialogInterface.dismiss();
-                                        captureReceipt();
-                                    }
-                                });
-                                ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                                    }
-                                });
                                 if (!status) {
                                     ad.setMessage("Your Account Approval is Pending.");
+                                    ad.setPositiveButton("Upload Receipt", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            //  dialogInterface.dismiss();
+                                            captureReceipt();
+                                        }
+                                    });
+                                    ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    });
                                 } else {
                                     ad.setMessage("Account Approved.");
+                                    ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                          onBackPressed();
+                                        }
+                                    });
                                 }
                                 ad.show();
                             }
@@ -175,24 +182,29 @@ public class LoginActivity extends AppCompatActivity {
                                         new AlertDialog.Builder(LoginActivity.this);
                                 ad.setTitle("Your Salon");
 
-                                ad.setPositiveButton("Upload Receipt", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                        captureReceipt();
-
-                                    }
-                                });
-                                ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    }
-                                });
                                 if (!status) {
                                     ad.setMessage("Your Account Approval is Pending.");
+                                    ad.setPositiveButton("Upload Receipt", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            //  dialogInterface.dismiss();
+                                            captureReceipt();
+                                        }
+                                    });
+                                    ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    });
                                 } else {
                                     ad.setMessage("Account Approved.");
+                                    ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            onBackPressed();
+                                        }
+                                    });
                                 }
                                 ad.show();
                             }
@@ -212,24 +224,29 @@ public class LoginActivity extends AppCompatActivity {
                                 AlertDialog.Builder ad =
                                         new AlertDialog.Builder(LoginActivity.this);
                                 ad.setTitle("Your Salon");
-                                ad.setPositiveButton("Upload Payment Receipt", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                        captureReceipt();
-
-                                    }
-                                });
-                                ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    }
-                                });
                                 if (!status) {
                                     ad.setMessage("Your Account Approval is Pending.");
+                                    ad.setPositiveButton("Upload Receipt", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            //  dialogInterface.dismiss();
+                                            captureReceipt();
+                                        }
+                                    });
+                                    ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    });
                                 } else {
                                     ad.setMessage("Account Approved.");
+                                    ad.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            onBackPressed();
+                                        }
+                                    });
                                 }
                                 ad.show();
                             }
