@@ -37,10 +37,11 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:onClick="loadMap"
+            android:id="@+id/ic_makeup">
 
             <LinearLayout
-                android:onClick="loadMap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -82,10 +83,11 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:onClick="loadMap"
+            android:id="@+id/ic_hairstyle">
 
             <LinearLayout
-                android:onClick="loadMap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -127,10 +129,11 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:onClick="loadMap"
+            android:id="@+id/ic_facial">
 
             <LinearLayout
-                android:onClick="loadMap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -178,10 +181,11 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:onClick="loadMap"
+            android:id="@+id/ic_hair_treatment">
 
             <LinearLayout
-                android:onClick="loadMap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -221,10 +225,11 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:onClick="loadMap"
+            android:id="@+id/ic_henna">
 
             <LinearLayout
-                android:onClick="loadMap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -263,10 +268,11 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:onClick="loadMap"
+            android:id="@+id/ic_bath">
 
             <LinearLayout
-                android:onClick="loadMap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -315,7 +321,8 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:id="@+id/ic_haircut">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -358,7 +365,8 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:id="@+id/ic_wax">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -401,7 +409,8 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:id="@+id/ic_eyebrows">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -452,13 +461,14 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:onClick="loadMap"
+            android:id="@+id/ic_massage">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:onClick="loadMap">
+                android:orientation="vertical">
 
 
                 <LinearLayout
@@ -495,10 +505,11 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:onClick="loadMap"
+            android:id="@+id/ic_hair_protien">
 
             <LinearLayout
-                android:onClick="loadMap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -537,10 +548,11 @@
             android:layout_width="0dp"
             android:layout_weight="0.33"
             android:layout_height="match_parent"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:onClick="loadMap"
+            android:id="@+id/ic_photograpgy">
 
             <LinearLayout
-                android:onClick="loadMap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
