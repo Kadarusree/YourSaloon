@@ -9,23 +9,16 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -39,7 +32,7 @@ import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SalonRegistration1 extends AppCompatActivity {
+public class BusinessGuestRegistration1 extends AppCompatActivity {
 
     TextView sr,services;
     CircleImageView cview;
@@ -55,7 +48,7 @@ public class SalonRegistration1 extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        setContentView(R.layout.activity_salon_registration1);
+        setContentView(R.layout.business_guest_registration1);
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage("Sending Data");
@@ -77,7 +70,7 @@ public class SalonRegistration1 extends AppCompatActivity {
             public void onClick(View v) {
 
                 AlertDialog.Builder ad =
-                        new AlertDialog.Builder(SalonRegistration1.this);
+                        new AlertDialog.Builder(BusinessGuestRegistration1.this);
                 ad.setTitle("Your Salon");
                 ad.setMessage("Please select Image source.");
                 DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
@@ -141,9 +134,9 @@ public class SalonRegistration1 extends AppCompatActivity {
    public void register(View v)
     {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-        DatabaseReference ref =  dBase.getReference("/saloons");
+        DatabaseReference ref =  dBase.getReference("/business_guest/" + uid);
+
         DatabaseReference child_ref = ref.child("/"+uid);
         child_ref.child("makeup").setValue(makeup.isChecked());
         child_ref.child("bodycare").setValue(bodycare.isChecked());
@@ -161,7 +154,7 @@ public class SalonRegistration1 extends AppCompatActivity {
 
 
         AlertDialog.Builder ad =
-                new AlertDialog.Builder(SalonRegistration1.this);
+                new AlertDialog.Builder(BusinessGuestRegistration1.this);
         ad.setTitle("Your Salon");
         ad.setMessage("Your Registration is success,Thank you for registration. ");
         DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
@@ -171,7 +164,7 @@ public class SalonRegistration1 extends AppCompatActivity {
                     dialog.dismiss();
                    // System.exit(0);
 
-                    startActivity(new Intent(SalonRegistration1.this,
+                    startActivity(new Intent(BusinessGuestRegistration1.this,
                             LoginOptionsActivity.class));
 
                  } else if (which == AlertDialog.BUTTON_NEGATIVE) {
@@ -195,20 +188,23 @@ public class SalonRegistration1 extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference ref = storage.getReference("saloons/"+uid);
+        StorageReference ref = storage.getReference("/saloons/"+uid);
         try {
             FileInputStream fis = openFileInput("salon_profile_pic.png");
             ref.child("salon_profile_pic.png").
                     putStream(fis).
-                    addOnSuccessListener(taskSnapshot -> {
+                    addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+               @Override
+               public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                       String url = ref.getDownloadUrl().toString();
+                   String url = ref.getDownloadUrl().toString();
+                   FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                   DatabaseReference ref =  dBase.getReference("/users");
+                   DatabaseReference child_ref = ref.child("/"+uid);
+                   child_ref.child("saloon_profile_pic").setValue(url);
 
-                        FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                        DatabaseReference ref1 =  dBase.getReference("saloons");
-                        DatabaseReference child_ref = ref1.child("/"+uid);
-                        child_ref.child("saloon_profile_pic").setValue(url);
-                    });
+               }
+           });
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -221,18 +217,23 @@ public class SalonRegistration1 extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference ref = storage.getReference("/saloons/"+uid);
+        StorageReference ref = storage.getReference("/users/"+uid);
         try {
             FileInputStream fis = openFileInput("salon_commercial_reg_pic.png");
             ref.child("salon_commercial_reg_pic.png").
                     putStream(fis).
-                    addOnSuccessListener(taskSnapshot -> {
-                       String url =    ref.getDownloadUrl().toString();
-                        FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                        DatabaseReference ref1 =  dBase.getReference("/saloons");
-                        DatabaseReference child_ref = ref1.child("/"+uid);
-                        child_ref.child("salon_commercial_reg_pic").setValue(url);
+                    addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
+                            String url =    ref.getDownloadUrl().toString();
+
+                            FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                            DatabaseReference ref =  dBase.getReference("/users");
+                            DatabaseReference child_ref = ref.child("/"+uid);
+                            child_ref.child("salon_commercial_reg_pic").setValue(url);
+
+                        }
                     });
         }catch (Exception e){
             e.printStackTrace();

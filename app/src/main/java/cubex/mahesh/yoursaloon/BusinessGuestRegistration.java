@@ -20,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -70,6 +72,10 @@ public class BusinessGuestRegistration extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_business_guest_registration);
 
         mAuth = FirebaseAuth.getInstance();
@@ -186,21 +192,24 @@ public class BusinessGuestRegistration extends AppCompatActivity {
             }
         });
 
+        Typeface tf1 = Typeface.createFromAsset
+                (getAssets(), "calibri.ttf");
+
         email = findViewById(R.id.email);
-        email.setTypeface(tf);
+        email.setTypeface(tf1);
 
         pass = findViewById(R.id.pass);
-        pass.setTypeface(tf);
+        pass.setTypeface(tf1);
 
         phno = findViewById(R.id.phno);
-        phno.setTypeface(tf);
+        phno.setTypeface(tf1);
 
         city = findViewById(R.id.city);
-        city.setTypeface(tf);
+        city.setTypeface(tf1);
 
 
         location = findViewById(R.id.location);
-        location.setTypeface(tf);
+        location.setTypeface(tf1);
 
 
         Button location_picker = findViewById(R.id.location_picker);
@@ -256,15 +265,15 @@ public class BusinessGuestRegistration extends AppCompatActivity {
         }
 
         next = findViewById(R.id.next);
-        next.setTypeface(tf);
+        next.setTypeface(tf1);
 
 
     }
 
     public void next(View v) {
 
-//    startActivity(new Intent(this,
-//                    SalonRegistration1.class));
+    startActivity(new Intent(this,
+                    BusinessGuestRegistration1.class));
 
 
     }
@@ -623,7 +632,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 child_ref.child("password").setValue(pass.getText().toString());
                 child_ref.child("phoneno").setValue(phno.getText().toString());
                 child_ref.child("city").setValue(city.getText().toString());
-                child_ref.child("location").setValue(mSaloonLocation);
+                child_ref.child("location").setValue(location.getText().toString());
                 child_ref.child("accepted").setValue(false);
 
 

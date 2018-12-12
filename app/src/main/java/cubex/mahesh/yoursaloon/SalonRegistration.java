@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -74,6 +76,10 @@ public class SalonRegistration extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_salon_registration);
         mAuth = FirebaseAuth.getInstance();
         mProgressDialog = new ProgressDialog(this);
@@ -123,21 +129,24 @@ public class SalonRegistration extends AppCompatActivity {
         });
 
 
+        Typeface tf1 = Typeface.createFromAsset
+                (getAssets(), "calibri.ttf");
+
         email = findViewById(R.id.email);
-        email.setTypeface(tf);
+        email.setTypeface(tf1);
 
         pass = findViewById(R.id.pass);
-        pass.setTypeface(tf);
+        pass.setTypeface(tf1);
 
         phno = findViewById(R.id.phno);
-        phno.setTypeface(tf);
+        phno.setTypeface(tf1);
 
         city = findViewById(R.id.city);
-        city.setTypeface(tf);
+        city.setTypeface(tf1);
 
 
         location = findViewById(R.id.location);
-        location.setTypeface(tf);
+        location.setTypeface(tf1);
 
         location_picker = findViewById(R.id.location_picker);
         location_picker.setOnClickListener((v) -> {
@@ -153,7 +162,8 @@ public class SalonRegistration extends AppCompatActivity {
 
 
         next = findViewById(R.id.next);
-        next.setTypeface(tf);
+        next.setTypeface(tf1);
+
 
         LocationManager lManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);

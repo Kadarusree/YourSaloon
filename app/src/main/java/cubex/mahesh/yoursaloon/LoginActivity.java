@@ -15,6 +15,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -66,6 +68,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_login);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -77,27 +83,30 @@ public class LoginActivity extends AppCompatActivity {
         li = findViewById(R.id.li);
         li.setTypeface(tf);
 
+        Typeface tf1 = Typeface.createFromAsset
+                (getAssets(), "calibri.ttf");
+
         mAuth = FirebaseAuth.getInstance();
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage("Logging In");
         email = findViewById(R.id.email);
-        email.setTypeface(tf);
+        email.setTypeface(tf1);
 
         pwd = findViewById(R.id.password);
-        pwd.setTypeface(tf);
+        pwd.setTypeface(tf1);
 
         cb1 = findViewById(R.id.cb1);
-        cb1.setTypeface(tf);
+        cb1.setTypeface(tf1);
 
         fp = findViewById(R.id.fp);
-        fp.setTypeface(tf);
+        fp.setTypeface(tf1);
 
         login = findViewById(R.id.login);
-        login.setTypeface(tf);
+        login.setTypeface(tf1);
 
         caft = findViewById(R.id.caft);
-        caft.setTypeface(tf);
+        caft.setTypeface(tf1);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -147,6 +156,14 @@ public class LoginActivity extends AppCompatActivity {
                                     ad.setNegativeButton("Pay Now", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    });
+                                    ad.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            dialogInterface.dismiss();
 
                                         }
                                     });

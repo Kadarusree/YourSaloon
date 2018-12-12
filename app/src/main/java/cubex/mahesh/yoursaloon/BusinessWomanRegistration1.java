@@ -11,6 +11,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -41,6 +43,11 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         setContentView(R.layout.activity_business_woman_registration1);
 
         uploadProfilePic();
@@ -89,33 +96,35 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
             }
         });
 
+        Typeface tf1 = Typeface.createFromAsset
+                (getAssets(),"calibri.ttf");
         register = findViewById(R.id.register);
-        register.setTypeface(tf);
+        register.setTypeface(tf1);
 
         makeup=findViewById(R.id.makeup);
-        makeup.setTypeface(tf);
+        makeup.setTypeface(tf1);
         bodycare=findViewById(R.id.bodycare);
-        bodycare.setTypeface(tf);
+        bodycare.setTypeface(tf1);
         hennadesign=findViewById(R.id.hennadesign);
-        hennadesign.setTypeface(tf);
+        hennadesign.setTypeface(tf1);
         haircut=findViewById(R.id.haircut);
-        haircut.setTypeface(tf);
+        haircut.setTypeface(tf1);
         eyebrows=findViewById(R.id.eyebrows);
-        eyebrows.setTypeface(tf);
+        eyebrows.setTypeface(tf1);
         hairprotein=findViewById(R.id.hairprotein);
-        hairprotein.setTypeface(tf);
+        hairprotein.setTypeface(tf1);
         hairstyle=findViewById(R.id.hairstyles);
-        hairstyle.setTypeface(tf);
+        hairstyle.setTypeface(tf1);
         hairtreatment=findViewById(R.id.hairtreatment);
-        hairtreatment.setTypeface(tf);
+        hairtreatment.setTypeface(tf1);
         westernbath=findViewById(R.id.westrenbath);
-        westernbath.setTypeface(tf);
+        westernbath.setTypeface(tf1);
         wax=findViewById(R.id.wax);
-        wax.setTypeface(tf);
+        wax.setTypeface(tf1);
         massage=findViewById(R.id.massage);
-        massage.setTypeface(tf);
+        massage.setTypeface(tf1);
         photography=findViewById(R.id.photography);
-        photography.setTypeface(tf);
+        photography.setTypeface(tf1);
 
     }
 

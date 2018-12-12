@@ -13,16 +13,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_marginTop="10dp"
+            android:id="@+id/sr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Business Woman Registration"
             android:layout_gravity="center"
-            android:id="@+id/sr"
-            android:textSize="25sp"
+            android:layout_marginTop="10dp"
+            android:text="Business Guest Registration"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            />
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -41,35 +40,34 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ciview"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:id="@+id/ciview"
-                    app:civ_border_width="2dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"
                     app:civ_border_color="#FFFFFF"
-                    android:layout_gravity="center"
-                    android:src="@drawable/add_profile"
-                android:layout_margin="10dp"
-                    />
+                    app:civ_border_width="2dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Upload Identity Card"
-                    android:textSize="15sp"
-                    android:textColor="#FFFFFF"/>
-
-
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Services Available At Your Salon"
-                    android:layout_gravity="center"
-                    android:id="@+id/services"
-                    android:textSize="25sp"
+                    android:text="Upload Pictures of your work"
                     android:textColor="#FFFFFF"
+                    android:textSize="15sp" />
+
+
+                <TextView
+                    android:id="@+id/services"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="Select the services you provide"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
 
 
@@ -261,15 +259,15 @@
 
                 <Button
                     android:id="@+id/register"
-                    android:layout_margin="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" REGISTER "
-                    android:onClick="register"
-                    android:textSize="15sp"
                     android:layout_gravity="center"
+                    android:layout_margin="5dp"
                     android:background="@drawable/border_white"
-                    />
+                    android:onClick="register"
+                    android:text=" REGISTER "
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
 
 

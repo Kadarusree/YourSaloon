@@ -20,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -64,6 +66,10 @@ public class BusinessWomanRegistration extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_business_women_registration);
 
         mAuth = FirebaseAuth.getInstance();
@@ -112,22 +118,24 @@ public class BusinessWomanRegistration extends AppCompatActivity {
             }
         });
 
+        Typeface tf1 = Typeface.createFromAsset
+                (getAssets(), "calibri.ttf");
 
         email = findViewById(R.id.email);
-        email.setTypeface(tf);
+        email.setTypeface(tf1);
 
         pass = findViewById(R.id.pass);
-        pass.setTypeface(tf);
+        pass.setTypeface(tf1);
 
         phno = findViewById(R.id.phno);
-        phno.setTypeface(tf);
+        phno.setTypeface(tf1);
 
         city = findViewById(R.id.city);
-        city.setTypeface(tf);
+        city.setTypeface(tf1);
 
 
         location = findViewById(R.id.location);
-        location.setTypeface(tf);
+        location.setTypeface(tf1);
 
         Button location_picker = findViewById(R.id.location_picker);
         location_picker.setOnClickListener((v) -> {
@@ -143,10 +151,10 @@ public class BusinessWomanRegistration extends AppCompatActivity {
 
 
         next = findViewById(R.id.next);
-        next.setTypeface(tf);
+        next.setTypeface(tf1);
 
         refno = findViewById(R.id.ref_no);
-        refno.setTypeface(tf);
+        refno.setTypeface(tf1);
 
         LocationManager lManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
@@ -365,12 +373,12 @@ public class BusinessWomanRegistration extends AppCompatActivity {
                 FirebaseDatabase dBase = FirebaseDatabase.getInstance();
                 DatabaseReference ref = dBase.getReference("/business_women");
                 DatabaseReference child_ref = ref.child("/" + uid);
-                child_ref.child("reg_type").setValue("business_women");
+                child_ref.child("type").setValue("business_women");
                 child_ref.child("email").setValue(email.getText().toString());
                 child_ref.child("password").setValue(pass.getText().toString());
                 child_ref.child("phoneno").setValue(phno.getText().toString());
                 child_ref.child("city").setValue(city.getText().toString());
-                child_ref.child("location").setValue(mSaloonLocation);
+                child_ref.child("location").setValue(location.getText().toString());
                 child_ref.child("ref_no").setValue(refno.getText().toString());
                 child_ref.child("accepted").setValue(false);
 
