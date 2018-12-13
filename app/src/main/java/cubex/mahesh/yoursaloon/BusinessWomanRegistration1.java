@@ -159,7 +159,11 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == AlertDialog.BUTTON_POSITIVE) {
                     dialog.dismiss();
-                    System.exit(0);
+                   // System.exit(0);
+
+                    startActivity(new Intent(BusinessWomanRegistration1.this,
+                            LoginOptionsActivity.class));
+
                 } else if (which == AlertDialog.BUTTON_NEGATIVE) {
                     dialog.dismiss();
                 }
@@ -181,17 +185,31 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
         StorageReference ref = storage.getReference("/business_women/"+uid);
         try {
             FileInputStream fis = openFileInput("business_women_profile_pic.png");
-            ref.child("business_women_profile_pic.png").
-                    putStream(fis).
+            StorageReference cref=ref.child("business_women_profile_pic.png");
+            cref.putStream(fis).
                     addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            String url =    ref.getDownloadUrl().toString();
+                            cref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    String url =    uri.toString();
+                                    FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                                    DatabaseReference ref =  dBase.getReference("/business_women");
+                                    DatabaseReference child_ref = ref.child("/"+uid);
+                                    child_ref.child("business_women_profile_pic").setValue(url);
+
+
+                                }
+                            });
+
+                          /*  String url =    ref.getDownloadUrl().toString();
                             FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                            DatabaseReference ref =  dBase.getReference("/users");
+                            DatabaseReference ref =  dBase.getReference("/business_women");
                             DatabaseReference child_ref = ref.child("/"+uid);
-                            child_ref.child("business_women_profile_pic").setValue(url);
+                            child_ref.child("business_women_profile_pic").setValue(url);*/
 
                         }
                     });
@@ -207,21 +225,38 @@ public class BusinessWomanRegistration1 extends AppCompatActivity {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference ref = storage.getReference("/users/"+uid);
+        StorageReference ref = storage.getReference("/business_women/"+uid);
         try {
             FileInputStream fis = openFileInput("business_women_commercial_reg_pic.png");
-            ref.child("business_women_commercial_reg_pic.png").
-                    putStream(fis).
+            StorageReference cref= ref.child("business_women_commercial_reg_pic.png");
+            cref.putStream(fis).
                     addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            String url =    ref.getDownloadUrl().toString();
+                            cref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    String url =    uri.toString();
+
+                                    FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                                    DatabaseReference ref =  dBase.getReference("/business_women");
+                                    DatabaseReference child_ref = ref.child("/"+uid);
+                                    child_ref.child("business_women_commercial_reg_pic").setValue(url);
+
+                                }
+                            });
+
+
+
+
+                           /* String url =    ref.getDownloadUrl().toString();
 
                             FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                            DatabaseReference ref =  dBase.getReference("/users");
+                            DatabaseReference ref =  dBase.getReference("/business_women");
                             DatabaseReference child_ref = ref.child("/"+uid);
-                            child_ref.child("business_women_commercial_reg_pic").setValue(url);
+                            child_ref.child("business_women_commercial_reg_pic").setValue(url);*/
 
                         }
                     });

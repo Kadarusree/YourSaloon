@@ -198,16 +198,33 @@ public class SalonRegistration1 extends AppCompatActivity {
         StorageReference ref = storage.getReference("saloons/"+uid);
         try {
             FileInputStream fis = openFileInput("salon_profile_pic.png");
-            ref.child("salon_profile_pic.png").
-                    putStream(fis).
+            StorageReference cref = ref.child("salon_profile_pic.png");
+            cref.putStream(fis).
                     addOnSuccessListener(taskSnapshot -> {
+                        cref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
 
-                       String url = ref.getDownloadUrl().toString();
+                                String url = uri.toString();
+                                FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                                DatabaseReference ref1 =  dBase.getReference("saloons");
+                                DatabaseReference child_ref = ref1.child("/"+uid);
+                                child_ref.child("saloon_profile_pic").setValue(url);
+
+
+                            }
+                        });
+
+
+
+                     /*  String url = ref.getDownloadUrl().toString();
 
                         FirebaseDatabase dBase = FirebaseDatabase.getInstance();
                         DatabaseReference ref1 =  dBase.getReference("saloons");
                         DatabaseReference child_ref = ref1.child("/"+uid);
-                        child_ref.child("saloon_profile_pic").setValue(url);
+                        child_ref.child("saloon_profile_pic").setValue(url);*/
+
+
                     });
         }catch (Exception e){
             e.printStackTrace();
@@ -224,14 +241,30 @@ public class SalonRegistration1 extends AppCompatActivity {
         StorageReference ref = storage.getReference("/saloons/"+uid);
         try {
             FileInputStream fis = openFileInput("salon_commercial_reg_pic.png");
-            ref.child("salon_commercial_reg_pic.png").
-                    putStream(fis).
+            StorageReference cref= ref.child("salon_commercial_reg_pic.png");
+            cref.putStream(fis).
                     addOnSuccessListener(taskSnapshot -> {
-                       String url =    ref.getDownloadUrl().toString();
+
+                        cref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+
+                                String url = uri.toString();
+                                FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                                DatabaseReference ref1 =  dBase.getReference("saloons");
+                                DatabaseReference child_ref = ref1.child("/"+uid);
+                                child_ref.child("salon_commercial_reg_pic").setValue(url);
+
+                            }
+                        });
+
+
+
+                        /*String url =    ref.getDownloadUrl().toString();
                         FirebaseDatabase dBase = FirebaseDatabase.getInstance();
                         DatabaseReference ref1 =  dBase.getReference("/saloons");
                         DatabaseReference child_ref = ref1.child("/"+uid);
-                        child_ref.child("salon_commercial_reg_pic").setValue(url);
+                        child_ref.child("salon_commercial_reg_pic").setValue(url);*/
 
                     });
         }catch (Exception e){

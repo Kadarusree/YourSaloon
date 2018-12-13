@@ -158,7 +158,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
             }
         });
 
-        cview2 = findViewById(R.id.ciview1);
+        cview2 = findViewById(R.id.ciview2);
         cview2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,9 +272,9 @@ public class BusinessGuestRegistration extends AppCompatActivity {
 
     public void next(View v) {
 
-    startActivity(new Intent(this,
+   /* startActivity(new Intent(this,
                     BusinessGuestRegistration1.class));
-
+*/
 
     }
 
@@ -296,7 +296,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 fos.close();
                 profile_pic_avaiable = true;
 
-                uploadProfilePic();
+               // uploadProfilePic();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -319,7 +319,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 fos.flush();
                 fos.close();
                 profile_pic_avaiable_2 = true;
-                uploadProfilePic();
+               // uploadProfilePic();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -340,7 +340,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 fos.flush();
                 fos.close();
                 profile_pic_avaiable_2 = true;
-                uploadIdentityPic();
+              //  uploadIdentityPic();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -362,7 +362,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 fos.flush();
                 fos.close();
                 profile_pic_avaiable_2 = true;
-                uploadIdentityPic();
+               // uploadIdentityPic();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -383,7 +383,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                         100, fos);
                 fos.flush();
                 fos.close();
-                uploadWorkAreaPic();
+               // uploadWorkAreaPic();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -405,7 +405,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 fos.flush();
                 fos.close();
 
-                uploadWorkAreaPic();
+             //   uploadWorkAreaPic();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -435,17 +435,31 @@ public class BusinessGuestRegistration extends AppCompatActivity {
         StorageReference ref = storage.getReference("/business_guest/" + uid);
         try {
             FileInputStream fis = openFileInput("business_guest_profile_pic.png");
-            ref.child("business_guest_profile_pic.png").
-                    putStream(fis).
+            StorageReference cref = ref.child("business_guest_profile_pic.png");
+            cref.putStream(fis).
                     addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            String url = ref.getDownloadUrl().toString();
+                            cref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+
+                                    String url = uri.toString();
+                                    FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                                    DatabaseReference ref = dBase.getReference("business_guest");
+                                    DatabaseReference child_ref = ref.child(uid);
+                                    child_ref.child("business_guest_profile_pic").setValue(url);
+
+                                }
+                            });
+
+                        /*    String url = ref.getDownloadUrl().toString();
                             FirebaseDatabase dBase = FirebaseDatabase.getInstance();
                             DatabaseReference ref = dBase.getReference("/business_guest");
                             DatabaseReference child_ref = ref.child("/" + uid);
-                            child_ref.child("business_guest_profile_pic").setValue(url);
+                            child_ref.child("business_guest_profile_pic").setValue(url);*/
 
                         }
                     });
@@ -463,17 +477,30 @@ public class BusinessGuestRegistration extends AppCompatActivity {
         StorageReference ref = storage.getReference("/business_guest/" + uid);
         try {
             FileInputStream fis = openFileInput("business_guest_identity.png");
-            ref.child("business_guest_identity.png").
-                    putStream(fis).
+            StorageReference cref = ref.child("business_guest_identity.png");
+            cref.putStream(fis).
                     addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            String url = ref.getDownloadUrl().toString();
+                            cref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    String url = uri.toString();
+                                    FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                                    DatabaseReference ref = dBase.getReference("business_guest");
+                                    DatabaseReference child_ref = ref.child(uid);
+                                    child_ref.child("business_guest_identity").setValue(url);
+
+                                }
+                            });
+
+                         /*   String url = ref.getDownloadUrl().toString();
                             FirebaseDatabase dBase = FirebaseDatabase.getInstance();
                             DatabaseReference ref = dBase.getReference("/business_guest");
                             DatabaseReference child_ref = ref.child("/" + uid);
-                            child_ref.child("business_guest_identity").setValue(url);
+                            child_ref.child("business_guest_identity").setValue(url);*/
 
                         }
                     });
@@ -492,17 +519,32 @@ public class BusinessGuestRegistration extends AppCompatActivity {
         StorageReference ref = storage.getReference("/business_guest/" + uid);
         try {
             FileInputStream fis = openFileInput("business_guest_workarea.png");
-            ref.child("business_guest_workarea.png").
-                    putStream(fis).
+            StorageReference cref = ref.child("business_guest_workarea.png");
+                    cref.putStream(fis).
                     addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                            String url = ref.getDownloadUrl().toString();
+                            cref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+
+                                    String url = uri.toString();
+                                    FirebaseDatabase dBase = FirebaseDatabase.getInstance();
+                                    DatabaseReference ref = dBase.getReference("business_guest");
+                                    DatabaseReference child_ref = ref.child(uid);
+                                    child_ref.child("business_guest_workarea").setValue(url);
+
+
+                                }
+                            });
+
+                           /* String url = ref.getDownloadUrl().toString();
                             FirebaseDatabase dBase = FirebaseDatabase.getInstance();
                             DatabaseReference ref = dBase.getReference("/business_guest");
                             DatabaseReference child_ref = ref.child("/" + uid);
-                            child_ref.child("business_guest_workarea").setValue(url);
+                            child_ref.child("business_guest_workarea").setValue(url);*/
 
                         }
                     });
@@ -514,6 +556,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
 
     public void submit(View v) {
         if (validadtions()) {
+
             String randomNumber = String.format("%04d", new Random().nextInt(10000));
             sendOTP(phno.getText().toString(), randomNumber);
         }
@@ -606,6 +649,10 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 if (mEdtPin.getText().toString().equalsIgnoreCase(otp)) {
                     d.dismiss();
                     startSignUp();
+
+                    startActivity(new Intent(BusinessGuestRegistration.this,
+                            BusinessGuestRegistration1.class));
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Invalid OTP", Toast.LENGTH_LONG).show();
                 }
@@ -625,9 +672,9 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                 FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-                DatabaseReference ref = dBase.getReference("/business_guest");
+                DatabaseReference ref = dBase.getReference("business_guest");
                 DatabaseReference child_ref = ref.child("/" + uid);
-                child_ref.child("reg_type").setValue("business_guest");
+                child_ref.child("type").setValue("business_guest");
                 child_ref.child("email").setValue(email.getText().toString());
                 child_ref.child("password").setValue(pass.getText().toString());
                 child_ref.child("phoneno").setValue(phno.getText().toString());
@@ -635,25 +682,9 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 child_ref.child("location").setValue(location.getText().toString());
                 child_ref.child("accepted").setValue(false);
 
-
-                AlertDialog.Builder ad =
-                        new AlertDialog.Builder(BusinessGuestRegistration.this);
-                ad.setTitle("Your Salon");
-                ad.setMessage("Your Registration is success,Thank you for registration. ");
-                DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == AlertDialog.BUTTON_POSITIVE) {
-                            dialog.dismiss();
-                            System.exit(0);
-                        } else if (which == AlertDialog.BUTTON_NEGATIVE) {
-                            dialog.dismiss();
-                        }
-                    }
-                };
-                ad.setPositiveButton("Ok", listener);
-                ad.setNegativeButton("Cancel", listener);
-                ad.show();
+                uploadIdentityPic();
+                uploadProfilePic();
+                uploadWorkAreaPic();
 
 
             } else {

@@ -8,9 +8,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import cubex.mahesh.yoursaloon.pojos.BusinessGuestPojo;
+import cubex.mahesh.yoursaloon.pojos.BusinessWomenPojo;
 import cubex.mahesh.yoursaloon.pojos.SaloonPojo;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -62,13 +65,50 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+
+                        }
+                    }
+                }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isMakeup()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,15));
                         }
                     }
                 }
+
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isMakeup()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+
+
                 break;
             case "ic_hairstyle":
                 for(SaloonPojo pojo:DashboardActivity.saloons_list){
@@ -80,14 +120,46 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                            // mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc_obj,17));
                           //  mMap.animateCamera(CameraUpdateFactory.zoomTo(15f));
                         }
-
                     }
                 }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isHairstyle()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHairstyle()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
                 break;
             case "ic_facial":  //bodycare
                 for(SaloonPojo pojo:DashboardActivity.saloons_list){
@@ -99,12 +171,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
                         }
 
+                    }
+                }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isBodycare()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isBodycare()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
                     }
                 }
 
@@ -120,7 +224,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
@@ -128,6 +232,42 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     }
                 }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isHairtreatment()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHairtreatment()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+
+
 
                 break;
             case "ic_henna":
@@ -141,7 +281,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
@@ -149,6 +289,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     }
                 }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isHennadesign()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHennadesign()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+
 
                 break;
             case "ic_bath":
@@ -162,12 +336,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
                         }
 
+                    }
+                }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isWesternbath()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHennadesign()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
                     }
                 }
 
@@ -184,12 +390,46 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
                         }
 
+                    }
+                }
+
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isHaircut()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHaircut()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
                     }
                 }
 
@@ -205,12 +445,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
                         }
 
+                    }
+                }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isWax()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHaircut()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
                     }
                 }
 
@@ -226,7 +498,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
@@ -234,6 +506,41 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     }
                 }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isEyebrows()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHaircut()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+
 
                 break;
             case "ic_massage":
@@ -247,7 +554,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
@@ -255,6 +562,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     }
                 }
+
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isMassage()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHaircut()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
 
                 break;
             case "ic_hair_protien":
@@ -268,12 +609,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
                         }
 
+                    }
+                }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isHairprotein()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHaircut()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
                     }
                 }
 
@@ -289,12 +662,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             double lati = Double.parseDouble(values[0]);
                             double longi = Double.parseDouble(values[1]);
                             LatLng loc_obj = new LatLng(lati,longi);
-                            mMap.addMarker(new MarkerOptions().position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
                             mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
                             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                     loc_obj,10));
                         }
 
+                    }
+                }
+
+                for(BusinessWomenPojo pojo:DashboardActivity.bwomens_list){
+                    if(pojo.isPhotography()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
+                    }
+                }
+
+                for(BusinessGuestPojo pojo:DashboardActivity.bguests_list){
+                    if(pojo.isHaircut()){
+                        String loc = pojo.getLocation();
+                        if(loc.contains(",")){
+                            String[ ] values = loc.split(",");
+                            double lati = Double.parseDouble(values[0]);
+                            double longi = Double.parseDouble(values[1]);
+                            LatLng loc_obj = new LatLng(lati,longi);
+                            mMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(loc_obj).title(pojo.getEmail()+"\n"+pojo.getPhoneno()));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(loc_obj));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                                    loc_obj,15));
+                        }
                     }
                 }
 

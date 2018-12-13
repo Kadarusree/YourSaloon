@@ -1,6 +1,29 @@
 package cubex.mahesh.yoursaloon.pojos;
 
-public class SaloonPojo {
+public class BusinessWomenPojo {
+
+   private boolean accepted;
+   private boolean bodycare;
+   private String business_women_commercial_reg_pic;
+   private String business_women_profile_pic;
+   private String city;
+   private String email;
+   private boolean eyebrows;
+   private boolean haircut;
+   private boolean hairprotein;
+   private boolean hairstyle;
+   private boolean hairtreatment;
+   private boolean hennadesign;
+   private String location;
+   private boolean makeup;
+   private boolean massage;
+   private String password;
+   private String phoneno;
+   private boolean photography;
+   private String ref_no;
+   private String type;
+   private boolean wax;
+   private boolean westernbath;
 
     public boolean isAccepted() {
         return accepted;
@@ -16,6 +39,22 @@ public class SaloonPojo {
 
     public void setBodycare(boolean bodycare) {
         this.bodycare = bodycare;
+    }
+
+    public String getBusiness_women_commercial_reg_pic() {
+        return business_women_commercial_reg_pic;
+    }
+
+    public void setBusiness_women_commercial_reg_pic(String business_women_commercial_reg_pic) {
+        this.business_women_commercial_reg_pic = business_women_commercial_reg_pic;
+    }
+
+    public String getBusiness_women_profile_pic() {
+        return business_women_profile_pic;
+    }
+
+    public void setBusiness_women_profile_pic(String business_women_profile_pic) {
+        this.business_women_profile_pic = business_women_profile_pic;
     }
 
     public String getCity() {
@@ -106,7 +145,7 @@ public class SaloonPojo {
         this.massage = massage;
     }
 
-    public String isPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -128,6 +167,14 @@ public class SaloonPojo {
 
     public void setPhotography(boolean photography) {
         this.photography = photography;
+    }
+
+    public String getRef_no() {
+        return ref_no;
+    }
+
+    public void setRef_no(String ref_no) {
+        this.ref_no = ref_no;
     }
 
     public String getType() {
@@ -152,43 +199,5 @@ public class SaloonPojo {
 
     public void setWesternbath(boolean westernbath) {
         this.westernbath = westernbath;
-    }
-
-    private boolean accepted;
-    private boolean bodycare;
-    private String city;
-    private String email;
-    private boolean eyebrows;
-    private boolean haircut;
-    private boolean hairprotein;
-    private boolean hairstyle;
-    private boolean hairtreatment;
-    private boolean hennadesign;
-    private String location;
-    private boolean makeup;
-    private boolean massage;
-    private String password;
-    private String phoneno;
-    private boolean photography;
-    private String type;
-    private boolean wax;
-    private boolean westernbath;
-    private String salon_commercial_reg_pic;
-    private String saloon_profile_pic;
-
-    public String getSalon_commercial_reg_pic() {
-        return salon_commercial_reg_pic;
-    }
-
-    public void setSalon_commercial_reg_pic(String salon_commercial_reg_pic) {
-        this.salon_commercial_reg_pic = salon_commercial_reg_pic;
-    }
-
-    public String getSaloon_profile_pic() {
-        return saloon_profile_pic;
-    }
-
-    public void setSaloon_profile_pic(String saloon_profile_pic) {
-        this.saloon_profile_pic = saloon_profile_pic;
     }
 }

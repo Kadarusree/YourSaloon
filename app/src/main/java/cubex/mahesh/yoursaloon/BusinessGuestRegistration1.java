@@ -52,7 +52,7 @@ public class BusinessGuestRegistration1 extends AppCompatActivity {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage("Sending Data");
-        uploadProfilePic();
+        // uploadProfilePic();
 
         Typeface tf = Typeface.createFromAsset
                 (getAssets(),"B93.ttf");
@@ -63,7 +63,7 @@ public class BusinessGuestRegistration1 extends AppCompatActivity {
         services = findViewById(R.id.services);
         services.setTypeface(tf);
 
-        cview = findViewById(R.id.ciview);
+       /* cview = findViewById(R.id.ciview);
 
         cview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +96,7 @@ public class BusinessGuestRegistration1 extends AppCompatActivity {
                 ad.setNeutralButton("Cancel", listener);
                 ad.show();
             }
-        });
+        });*/
 
         Typeface tf1 = Typeface.createFromAsset
                 (getAssets(),"calibri.ttf");
@@ -135,7 +135,7 @@ public class BusinessGuestRegistration1 extends AppCompatActivity {
     {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase dBase = FirebaseDatabase.getInstance();
-        DatabaseReference ref =  dBase.getReference("/business_guest/" + uid);
+        DatabaseReference ref =  dBase.getReference("business_guest");
 
         DatabaseReference child_ref = ref.child("/"+uid);
         child_ref.child("makeup").setValue(makeup.isChecked());

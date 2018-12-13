@@ -16,7 +16,7 @@
             android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Business Woman Registration"
+            android:text="Business Women Registration"
             android:layout_gravity="center"
             android:id="@+id/sr"
             android:textSize="25sp"
@@ -41,16 +41,15 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/ciview"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:id="@+id/ciview"
-                    app:civ_border_width="2dp"
-                    app:civ_border_color="#FFFFFF"
                     android:layout_gravity="center"
-                    android:src="@drawable/add_profile"
-                android:layout_margin="10dp"
-                    />
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_add_circle_outline_black_24dp"
+                    app:civ_border_color="#FFFFFF"
+                    app:civ_border_width="2dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -62,14 +61,14 @@
 
 
                 <TextView
-                    android:layout_marginTop="10dp"
+                    android:id="@+id/services"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Services Available At Your Salon"
                     android:layout_gravity="center"
-                    android:id="@+id/services"
-                    android:textSize="25sp"
+                    android:layout_marginTop="10dp"
+                    android:text="Select Services You Provide"
                     android:textColor="#FFFFFF"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
 
 

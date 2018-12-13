@@ -1,6 +1,53 @@
 package cubex.mahesh.yoursaloon.pojos;
 
-public class SaloonPojo {
+public class BusinessGuestPojo {
+
+   private boolean accepted;
+   private boolean bodycare;
+   private String city;
+   private String email;
+   private boolean eyebrows;
+   private boolean haircut;
+   private boolean hairprotein;
+   private boolean hairstyle;
+   private boolean hairtreatment;
+   private boolean hennadesign;
+   private String location;
+   private boolean makeup;
+   private boolean massage;
+   private String password;
+   private String phoneno;
+   private boolean photography;
+   private String type;
+   private boolean wax;
+   private boolean westernbath;
+   private String business_guest_identity;
+   private String business_guest_profile_pic;
+   private String business_guest_workarea;
+
+    public String getBusiness_guest_identity() {
+        return business_guest_identity;
+    }
+
+    public void setBusiness_guest_identity(String business_guest_identity) {
+        this.business_guest_identity = business_guest_identity;
+    }
+
+    public String getBusiness_guest_profile_pic() {
+        return business_guest_profile_pic;
+    }
+
+    public void setBusiness_guest_profile_pic(String business_guest_profile_pic) {
+        this.business_guest_profile_pic = business_guest_profile_pic;
+    }
+
+    public String getBusiness_guest_workarea() {
+        return business_guest_workarea;
+    }
+
+    public void setBusiness_guest_workarea(String business_guest_workarea) {
+        this.business_guest_workarea = business_guest_workarea;
+    }
 
     public boolean isAccepted() {
         return accepted;
@@ -106,7 +153,7 @@ public class SaloonPojo {
         this.massage = massage;
     }
 
-    public String isPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -152,43 +199,5 @@ public class SaloonPojo {
 
     public void setWesternbath(boolean westernbath) {
         this.westernbath = westernbath;
-    }
-
-    private boolean accepted;
-    private boolean bodycare;
-    private String city;
-    private String email;
-    private boolean eyebrows;
-    private boolean haircut;
-    private boolean hairprotein;
-    private boolean hairstyle;
-    private boolean hairtreatment;
-    private boolean hennadesign;
-    private String location;
-    private boolean makeup;
-    private boolean massage;
-    private String password;
-    private String phoneno;
-    private boolean photography;
-    private String type;
-    private boolean wax;
-    private boolean westernbath;
-    private String salon_commercial_reg_pic;
-    private String saloon_profile_pic;
-
-    public String getSalon_commercial_reg_pic() {
-        return salon_commercial_reg_pic;
-    }
-
-    public void setSalon_commercial_reg_pic(String salon_commercial_reg_pic) {
-        this.salon_commercial_reg_pic = salon_commercial_reg_pic;
-    }
-
-    public String getSaloon_profile_pic() {
-        return saloon_profile_pic;
-    }
-
-    public void setSaloon_profile_pic(String saloon_profile_pic) {
-        this.saloon_profile_pic = saloon_profile_pic;
     }
 }
