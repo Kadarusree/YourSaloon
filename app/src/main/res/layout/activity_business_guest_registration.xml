@@ -89,12 +89,13 @@
                     android:background="@drawable/border_white"/>
 
 
-                <EditText
+                <Spinner
                     android:id="@+id/city"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_margin="5dp"
                     android:hint="City"
+                    android:entries="@array/cities"
                     android:gravity="center"
                     android:background="@drawable/border_white"/>
 

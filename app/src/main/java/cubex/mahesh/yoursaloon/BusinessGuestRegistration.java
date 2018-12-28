@@ -24,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +59,9 @@ public class BusinessGuestRegistration extends AppCompatActivity {
     TextView sr;
     CircleImageView cview, cview1, cview2;
 
-    EditText email, pass, phno, city, location;
+    EditText email, pass, phno,  location;
+
+    Spinner city;
 
     Button next;
 
@@ -205,12 +208,12 @@ public class BusinessGuestRegistration extends AppCompatActivity {
         phno.setTypeface(tf1);
 
         city = findViewById(R.id.city);
-        city.setTypeface(tf1);
+       // city.setTypeface(tf1);
 
 
         location = findViewById(R.id.location);
         location.setTypeface(tf1);
-
+        location.setEnabled(false);
 
         Button location_picker = findViewById(R.id.location_picker);
         location_picker.setOnClickListener((v) -> {
@@ -224,7 +227,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
             }
         });
 
-
+/*
         LocationManager lManager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
 
@@ -262,7 +265,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
 
                         }
                     });
-        }
+        }*/
 
         next = findViewById(R.id.next);
         next.setTypeface(tf1);
@@ -419,8 +422,53 @@ public class BusinessGuestRegistration extends AppCompatActivity {
             double lati = selectedPlace.getLatLng().latitude;
             double longi = selectedPlace.getLatLng().latitude;
 
-            location.setText(lati + "," + longi);
+          //  location.setText(lati + "," + longi);
             mSaloonLocation = new SaloonLocation(lati, longi);
+
+            String selectedCountry = selectedPlace.getAddress().toString();
+
+            if(selectedCountry.contains("Saudi Arabia")){
+
+                location.setText(lati + "," + longi);
+
+            }else{
+
+
+                AlertDialog.Builder  builder = new AlertDialog.Builder(BusinessGuestRegistration.this);
+                builder.setMessage("Your Address is : "+selectedPlace.getAddress()+", You are not belongs to Saudi Arabia, This app is only for Saudi Arabia People.");
+                builder.setTitle("Message");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        System.exit(0);
+
+                        dialog.dismiss();
+
+                    }
+                });
+                builder.setNegativeButton("Change Location", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                        try {
+                            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                            Intent i = builder.build(BusinessGuestRegistration.this);
+                            startActivityForResult(i, 150);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                });
+                builder.show();
+
+
+            }
 
         }
 
@@ -577,8 +625,10 @@ public class BusinessGuestRegistration extends AppCompatActivity {
             email.setError("Password must be minimum 6 characters");
             isValid = false;
         }
-        if (city.getText().toString().length() < 3) {
-            city.setError("City Name must be minimum 3 characters");
+        if (city.getSelectedItem().toString().equals("Select City")) {
+           // city.setError("City Name must be minimum 3 characters");
+            Toast.makeText(getApplicationContext(), "Please Select City", Toast.LENGTH_SHORT).show();
+
             isValid = false;
         }
 
@@ -678,7 +728,7 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 child_ref.child("email").setValue(email.getText().toString());
                 child_ref.child("password").setValue(pass.getText().toString());
                 child_ref.child("phoneno").setValue(phno.getText().toString());
-                child_ref.child("city").setValue(city.getText().toString());
+                child_ref.child("city").setValue(city.getSelectedItem().toString());
                 child_ref.child("location").setValue(location.getText().toString());
                 child_ref.child("accepted").setValue(false);
 
