@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,10 +31,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -72,6 +77,8 @@ public class BusinessGuestRegistration extends AppCompatActivity {
     boolean profile_pic_avaiable_2 = false;
     ProgressDialog mProgressDialog;
 
+    String fcm_id = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +87,21 @@ public class BusinessGuestRegistration extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_business_guest_registration);
+
+
+
+        FirebaseInstanceId.getInstance().getInstanceId().
+                addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                        fcm_id = task.getResult().getToken();
+
+                        //child_ref.child("fcm_id").setValue(token);
+                    }
+                });
+
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -731,6 +753,18 @@ public class BusinessGuestRegistration extends AppCompatActivity {
                 child_ref.child("city").setValue(city.getSelectedItem().toString());
                 child_ref.child("location").setValue(location.getText().toString());
                 child_ref.child("accepted").setValue(false);
+                child_ref.child("fcm_id").setValue(fcm_id);
+
+               /* FirebaseInstanceId.getInstance().getInstanceId().
+                        addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                                String token = task.getResult().getToken();
+
+                                child_ref.child("fcm_id").setValue(token);
+                            }
+                        });*/
 
                 uploadIdentityPic();
                 uploadProfilePic();

@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,9 +31,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -66,6 +71,8 @@ public class BusinessWomanRegistration extends AppCompatActivity {
     boolean profile_pic_avaiable = false;
     ProgressDialog mProgressDialog;
 
+    String fcm_id = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +81,19 @@ public class BusinessWomanRegistration extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_business_women_registration);
+
+
+        FirebaseInstanceId.getInstance().getInstanceId().
+                addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                        fcm_id = task.getResult().getToken();
+
+                        //child_ref.child("fcm_id").setValue(token);
+                    }
+                });
+
 
         mAuth = FirebaseAuth.getInstance();
         mProgressDialog = new ProgressDialog(this);
@@ -433,6 +453,20 @@ public class BusinessWomanRegistration extends AppCompatActivity {
                 child_ref.child("location").setValue(location.getText().toString());
                 child_ref.child("ref_no").setValue(refno.getText().toString());
                 child_ref.child("accepted").setValue(false);
+                child_ref.child("fcm_id").setValue(fcm_id);
+
+               /* FirebaseInstanceId.getInstance().getInstanceId().
+                        addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                                String token = task.getResult().getToken();
+
+                                child_ref.child("fcm_id").setValue(token);
+                            }
+                        });
+*/
+
 
                 startActivity(new Intent(this,
                         BusinessWomanRegistration1.class));

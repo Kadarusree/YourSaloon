@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,9 +33,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -72,6 +78,7 @@ public class SalonRegistration extends AppCompatActivity {
 
     boolean profile_pic_avaiable = false;
 
+    String fcm_id = "";
 
     SaloonLocation mSaloonLocation;
 
@@ -90,6 +97,20 @@ public class SalonRegistration extends AppCompatActivity {
         mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage("Sending OTP");
         mAuth = FirebaseAuth.getInstance();
+
+
+        FirebaseInstanceId.getInstance().getInstanceId().
+                addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                        fcm_id = task.getResult().getToken();
+
+                        //child_ref.child("fcm_id").setValue(token);
+                    }
+                });
+
+
 
         Typeface tf = Typeface.createFromAsset
                 (getAssets(), "B93.ttf");
@@ -438,6 +459,18 @@ public class SalonRegistration extends AppCompatActivity {
                 child_ref.child("phoneno").setValue(phno.getText().toString());
                 child_ref.child("city").setValue(city.getSelectedItem().toString());
                 child_ref.child("location").setValue(location.getText().toString());
+                child_ref.child("fcm_id").setValue(fcm_id);
+
+              /*  FirebaseInstanceId.getInstance().getInstanceId().
+                        addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                                String token = task.getResult().getToken();
+
+                                child_ref.child("fcm_id").setValue(token);
+                            }
+                        });*/
 
                 startActivity(new Intent(this,
                         SalonRegistration1.class));

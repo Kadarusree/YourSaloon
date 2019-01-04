@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "906708158287-cq9kue7jacradjm0e1kcvmhl9gge2mqm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cubex.mahesh.yoursaloon",
+            "certificate_hash": "61dc5e01fd17430475893e5c7892932bc4f9bc87"
+          }
+        },
+        {
           "client_id": "906708158287-rlmjb7uo3ac1st8cgmc0nicopigkikef.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -44,6 +52,37 @@
               "client_type": 3
             }
           ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906708158287:android:d3122bd57b41eb97",
+        "android_client_info": {
+          "package_name": "mahesh.cubex.saloonadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906708158287-rlmjb7uo3ac1st8cgmc0nicopigkikef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSJIfIv_6ZgaOYfLy4qDjKrxLSWVTzp2k"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

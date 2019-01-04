@@ -37,6 +37,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -72,6 +74,8 @@ public class CustomerRegistration extends AppCompatActivity {
 
     ProgressDialog mProgressDialog;
 
+    String fcm_id = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +90,17 @@ public class CustomerRegistration extends AppCompatActivity {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage("Sending OTP");
+
+        FirebaseInstanceId.getInstance().getInstanceId().
+                addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                        fcm_id = task.getResult().getToken();
+
+                        //child_ref.child("fcm_id").setValue(token);
+                    }
+                });
 
 
         Typeface tf = Typeface.createFromAsset
@@ -233,7 +248,7 @@ public class CustomerRegistration extends AppCompatActivity {
                                             email.getText().toString(),
                                             phno.getText().toString().trim(),
                                             city.getText().toString(),
-                                            "", url, "customer");
+                                            fcm_id, url, "customer");
                                     uploadIntoDB(mUser, uid);
                                 }
                             });
@@ -260,6 +275,8 @@ public class CustomerRegistration extends AppCompatActivity {
         mProgressDialog.show();
         FirebaseDatabase dBase = FirebaseDatabase.getInstance();
         DatabaseReference ref = dBase.getReference("/users");
+
+
         ref.child(uid).setValue(mUser).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
